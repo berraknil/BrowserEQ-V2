@@ -1,4 +1,4 @@
-# BrowserEQ v2 - Audio Enhancement for Your Browser
+# BrowserEQ v2 - Hear Better
 
 [Deutsche Version weiter unten](#browsereq-v2---audio-verbesserung-für-deinen-browser)
 
