@@ -653,6 +653,7 @@ h4 {
   align-items: center;
   flex: 1;
   margin-left: 12px;
+  width: 100%;
 }
 
 .volume-value {
@@ -665,11 +666,14 @@ h4 {
 .compact-volume .compact-slider {
   flex: 1;
   margin: 0;
+  width: 100%;
+  display: flex;
 }
 
 .compact-volume :deep(.v-slider) {
   margin: 0;
   width: 100%;
+  min-width: 120px;
 }
 
 .compact-volume .compact-mute {
@@ -718,6 +722,20 @@ main.minimized {
 
 .compact-controls .v-btn .v-icon {
   --v-icon-size-multiplier: 1.1 !important;
+}
+
+.v-slider.v-input--horizontal {
+  margin-inline: 0;
+  width: 100%;
+  /* Ensure slider takes full width */
+}
+
+.compact-volume :deep(.v-slider__track) {
+  width: 100%;
+}
+
+.compact-volume :deep(.v-slider__track-container) {
+  width: 100%;
 }
 
 .v-slider.v-input--horizontal {
