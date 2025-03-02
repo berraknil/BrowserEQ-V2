@@ -1,0 +1,14 @@
+{
+  "cSpell.words": [
+    ""
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "vite.autoStart": false,
+  "eslint.experimental.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "files.associations": {
+    "*.css": "postcss"
+  }
+}

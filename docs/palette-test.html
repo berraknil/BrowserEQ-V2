@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrowserEQ Color Palette Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .color-card {
+            padding: 20px;
+            border-radius: 8px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 150px;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .color-hex {
+            font-family: monospace;
+            opacity: 0.9;
+        }
+
+        .color-variable {
+            font-style: italic;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .text-dark {
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <section>
+            <h1>BrowserEQ Color Palette Test</h1>
+            <p>This page demonstrates the new color palette based on #CB2A4D.</p>
+
+            <h2>Primary Colors</h2>
+            <div class="color-grid">
+                <div class="color-card" style="background-color: #CB2A4D;">
+                    <span class="color-name">Primary Red</span>
+                    <span class="color-hex">#CB2A4D</span>
+                    <span class="color-variable">--primary-color</span>
+                </div>
+                <div class="color-card" style="background-color: #A8213F;">
+                    <span class="color-name">Primary Dark</span>
+                    <span class="color-hex">#A8213F</span>
+                    <span class="color-variable">--primary-dark</span>
+                </div>
+                <div class="color-card" style="background-color: #E04E6D;">
+                    <span class="color-name">Primary Light</span>
+                    <span class="color-hex">#E04E6D</span>
+                    <span class="color-variable">--primary-light</span>
+                </div>
+            </div>
+
+            <h2>Secondary and Accent Colors</h2>
+            <div class="color-grid">
+                <div class="color-card" style="background-color: #333741;">
+                    <span class="color-name">Secondary</span>
+                    <span class="color-hex">#333741</span>
+                    <span class="color-variable">--secondary-color</span>
+                </div>
+                <div class="color-card" style="background-color: #4A4E58;">
+                    <span class="color-name">Secondary Light</span>
+                    <span class="color-hex">#4A4E58</span>
+                    <span class="color-variable">--secondary-light</span>
+                </div>
+                <div class="color-card" style="background-color: #F59A3E;">
+                    <span class="color-name">Accent</span>
+                    <span class="color-hex">#F59A3E</span>
+                    <span class="color-variable">--accent-color</span>
+                </div>
+                <div class="color-card" style="background-color: #F7B368;">
+                    <span class="color-name">Accent Light</span>
+                    <span class="color-hex">#F7B368</span>
+                    <span class="color-variable">--accent-light</span>
+                </div>
+                <div class="color-card" style="background-color: #4CAF50;">
+                    <span class="color-name">Success</span>
+                    <span class="color-hex">#4CAF50</span>
+                    <span class="color-variable">--success-color</span>
+                </div>
+            </div>
+
+            <h2>Background and UI Colors</h2>
+            <div class="color-grid">
+                <div class="color-card text-dark" style="background-color: #f9f9fa;">
+                    <span class="color-name">Background</span>
+                    <span class="color-hex">#f9f9fa</span>
+                    <span class="color-variable">--background-color</span>
+                </div>
+                <div class="color-card text-dark" style="background-color: #ffffff;">
+                    <span class="color-name">Card Background</span>
+                    <span class="color-hex">#ffffff</span>
+                    <span class="color-variable">--card-bg</span>
+                </div>
+                <div class="color-card text-dark" style="background-color: #e8e9eb;">
+                    <span class="color-name">Border</span>
+                    <span class="color-hex">#e8e9eb</span>
+                    <span class="color-variable">--border-color</span>
+                </div>
+                <div class="color-card text-dark" style="background-color: #f0f2f5;">
+                    <span class="color-name">Code Background</span>
+                    <span class="color-hex">#f0f2f5</span>
+                    <span class="color-variable">--code-bg</span>
+                </div>
+                <div class="color-card" style="background-color: #2F3136;">
+                    <span class="color-name">Text</span>
+                    <span class="color-hex">#2F3136</span>
+                    <span class="color-variable">--text-color</span>
+                </div>
+            </div>
+
+            <h2>Component Examples</h2>
+            <div>
+                <h3>Buttons</h3>
+                <button class="github-buttons">Primary Button</button>
+                <br><br>
+
+                <h3>Feature Cards</h3>
+                <div class="features-grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="feature-card">
+                        <h3>Primary Card</h3>
+                        <p>This card uses the primary border color.</p>
+                    </div>
+                    <div class="feature-card" style="border-top-color: var(--accent-color);">
+                        <h3>Accent Card</h3>
+                        <p>This card uses the accent border color.</p>
+                    </div>
+                    <div class="feature-card" style="border-top-color: var(--success-color);">
+                        <h3>Success Card</h3>
+                        <p>This card uses the success border color.</p>
+                    </div>
+                </div>
+
+                <h3>Text Styles</h3>
+                <p>Regular text with a <a href="#">link</a> inside it.</p>
+                <p><strong>Strong text</strong> and <em>emphasized text</em>.</p>
+                <code>Some code text</code>
+
+                <h3>Message Boxes</h3>
+                <div class="note-box">
+                    <p>This is a note box using the accent color.</p>
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>Warning:</strong> This is a warning box using the primary color.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+</html>

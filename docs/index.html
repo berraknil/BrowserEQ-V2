@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrowserEQ v2 - Hear Better</title>
+    <!-- Google Font imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- External stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Add the floating language toggle buttons -->
+    <div class="floating-language-toggle" id="floating-lang-toggle">
+        <button onclick="setLanguage('en')" class="active" id="floating-en-btn">EN</button>
+        <button onclick="setLanguage('de')" id="floating-de-btn">DE</button>
+    </div>
+
+    <header>
+        <div class="wave-decoration"></div>
+        <div class="container">
+
+            <div class="language-toggle">
+                <button onclick="setLanguage('en')" class="active" id="en-btn">English</button>
+                <button onclick="setLanguage('de')" id="de-btn">Deutsch</button>
+            </div>
+            <img src="images/logo.png" alt="BrowserEQ Logo" class="logo">
+            <div class="en">
+                <p class="mono-subtitle">« Audio Enhancement for Your Browser »</p>
+            </div>
+            <div class="de">
+                <p class="mono-subtitle">« Audio-Verbesserung für deinen Browser »</p>
+            </div>
+            <div class="github-buttons">
+                <a href="https://github.com/berraknil/BrowserEQ-V2" target="_blank">View on GitHub</a>
+                <a href="https://github.com/berraknil/BrowserEQ-V2/releases/latest" target="_blank">Download Latest
+                    Version</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="tab-container">
+        <div class="tab-buttons container">
+            <button class="tab-button active" onclick="openTab(event, 'user-guide-tab')">User Guide</button>
+            <button class="tab-button" onclick="openTab(event, 'developer-guide-tab')">Developer Guide</button>
+            <button class="tab-button" onclick="openTab(event, 'examples-tab')">Examples</button>
+            <button class="tab-button" onclick="openTab(event, 'contributing-tab')">Contributing</button>
+        </div>
+    </div>
+
+    <main class="container">
+        <!-- User Guide Tab -->
+        <div id="user-guide-tab" class="tab-content active">
+            <section id="intro">
+                <div class="en">
+                    <p class="intro">BrowserEQ is a powerful audio equalizer extension that enhances your listening
+                        experience by
+                        giving you complete control over how audio sounds in your web browser. Whether you're dealing
+                        with
+                        challenging audio on video calls, enjoying music, or need to make content more accessible for
+                        your
+                        hearing needs, BrowserEQ puts professional audio tools at your fingertips.</p>
+                </div>
+                <div class="de">
+                    <p class="intro">BrowserEQ ist eine leistungsstarke Audio-Equalizer-Erweiterung, die dein
+                        Hörerlebnis
+                        verbessert,
+                        indem sie dir die vollständige Kontrolle darüber gibt, wie Audio in deinem Webbrowser klingt.
+                        Egal,
+                        ob du mit herausforderndem Audio bei Videoanrufen zu tun hast, Musik genießt oder Inhalte für
+                        deine
+                        Hörbedürfnisse zugänglicher machen musst, BrowserEQ stellt dir professionelle Audio-Tools zur
+                        Verfügung.</p>
+                </div>
+
+                <!-- Screenshot container -->
+                <figure class="screenshot-container">
+                    <img src="screenshots/browsereq-main.png" alt="BrowserEQ V2 Interface" class="screenshot">
+                    <figcaption class="en">BrowserEQ V2 interface with all its audio enhancement controls</figcaption>
+                    <figcaption class="de">BrowserEQ V2-Oberfläche mit allen Audio-Verbesserungssteuerungen</figcaption>
+                </figure>
+            </section>
+
+            <section id="installation">
+                <h2 class="en">Installation</h2>
+                <h2 class="de">Installation</h2>
+
+                <div class="en">
+                    <p>There are two ways to install BrowserEQ:</p>
+
+                    <div class="installation-options">
+
+
+                        <div class="installation-option">
+                            <h3>Manual Installation (From GitHub)</h3>
+                            <ol>
+                                <li>Go to the <a href="https://github.com/berraknil/BrowserEQ-V2/releases/latest"
+                                        target="_blank">latest release</a> on GitHub</li>
+                                <li>Download the <code>browsereq-v2.zip</code> file and extract it to a folder on your
+                                    computer</li>
+                                <li>Open Chrome and navigate to <code>chrome://extensions</code></li>
+                                <li>Enable "Developer mode" by toggling the switch in the top-right corner</li>
+                                <li>Click the "Load unpacked" button</li>
+                                <li>Select the extracted folder containing the extension files</li>
+                            </ol>
+                            <div class="note-box">
+                                <p><strong>Note:</strong> When installing extensions manually, you'll need to update
+                                    them manually as well. Check the GitHub repository regularly for new releases.</p>
+                            </div>
+                        </div>
+
+                        <div class="installation-option">
+                            <h3>Chrome Web Store</h3>
+                            <div class="warning-box">
+                                <p><strong>⚠️ Coming Soon:</strong> The extension is currently in the Chrome Web Store
+                                    approval process and is not yet available for direct installation from there. Please
+                                    use the GitHub installation method for now.</p>
+                            </div>
+                            <ol>
+                                <li>Navigate to the BrowserEQ page on Chrome Web Store <span class="muted">(coming
+                                        soon)</span></li>
+                                <li>Click the "Add to Chrome" button</li>
+                                <li>Confirm by clicking "Add extension" in the popup</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <h3>After Installation</h3>
+                    <p>Once installed, you'll see the BrowserEQ icon in your browser toolbar. Click it to open the
+                        equalizer interface.</p>
+                </div>
+
+                <div class="de">
+                    <p>Es gibt zwei Möglichkeiten, BrowserEQ zu installieren:</p>
+
+                    <div class="installation-options">
+
+
+                        <div class="installation-option">
+                            <h3>Manuelle Installation (von GitHub)</h3>
+                            <ol>
+                                <li>Gehe zur <a href="https://github.com/berraknil/BrowserEQ-V2/releases/latest"
+                                        target="_blank">neuesten Version</a> auf GitHub</li>
+                                <li>Lade die Datei <code>browsereq-v2.zip</code> herunter und entpacke sie in einen
+                                    Ordner auf deinem Computer</li>
+                                <li>Öffne Chrome und navigiere zu <code>chrome://extensions</code></li>
+                                <li>Aktiviere den "Entwicklermodus" durch Umschalten des Schalters in der oberen rechten
+                                    Ecke</li>
+                                <li>Klicke auf die Schaltfläche "Entpackte Erweiterung laden"</li>
+                                <li>Wähle den entpackten Ordner mit den Erweiterungsdateien aus</li>
+                            </ol>
+                            <div class="note-box">
+                                <p><strong>Hinweis:</strong> Bei manuell installierten Erweiterungen musst du diese auch
+                                    manuell aktualisieren. Überprüfe regelmäßig das GitHub-Repository auf neue
+                                    Versionen.</p>
+                            </div>
+                        </div>
+                        <div class="installation-option">
+                            <h3>Chrome Web Store</h3>
+                            <div class="warning-box">
+                                <p><strong>⚠️ Bald verfügbar:</strong> Die Erweiterung befindet sich derzeit im
+                                    Genehmigungsprozess des Chrome Web Stores und ist noch nicht direkt von dort
+                                    installierbar. Bitte nutze vorerst die GitHub-Installationsmethode.</p>
+                            </div>
+                            <ol>
+                                <li>Gehe zur BrowserEQ-Seite im Chrome Web Store <span class="muted">(bald
+                                        verfügbar)</span></li>
+                                <li>Klicke auf die Schaltfläche "Zu Chrome hinzufügen"</li>
+                                <li>Bestätige, indem du im Popup auf "Erweiterung hinzufügen" klickst</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <h3>Nach der Installation</h3>
+                    <p>Nach der Installation siehst du das BrowserEQ-Symbol in der Symbolleiste deines Browsers. Klicke
+                        darauf, um die Equalizer-Oberfläche zu öffnen.</p>
+                </div>
+            </section>
+
+            <section id="features">
+                <h2 class="en">Features</h2>
+                <h2 class="de">Funktionen</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3 class="en">Intuitive Interface</h3>
+                        <h3 class="de">Intuitive Benutzeroberfläche</h3>
+                        <p class="en">Simple controls with both full and compact modes</p>
+                        <p class="de">Einfache Steuerung mit sowohl vollständigen als auch kompakten Modi</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="en">6-Band EQ</h3>
+                        <h3 class="de">6-Band EQ</h3>
+                        <p class="en">Complete equalization with low pass, high pass, band pass, peaking, and shelf
+                            filters
+                        </p>
+                        <p class="de">Komplette Entzerrung mit Tiefpass-, Hochpass-, Bandpass-, Peaking- und
+                            Shelf-Filtern
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="en">Specialized Presets</h3>
+                        <h3 class="de">Spezialisierte Voreinstellungen</h3>
+                        <p class="en">Purpose-built sound profiles for voice calls, music, podcasts, and more</p>
+                        <p class="de">Zweckgebundene Klangprofile für Sprachanrufe, Musik, Podcasts und mehr</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="en">Audio Capture</h3>
+                        <h3 class="de">Audioaufnahme</h3>
+                        <p class="en">Record audio with your current EQ settings applied</p>
+                        <p class="de">Nimm Audio mit deinen aktuellen EQ-Einstellungen auf</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="en">Accessibility First</h3>
+                        <h3 class="de">Barrierefreiheit an erster Stelle</h3>
+                        <p class="en">Designed to accommodate various hearing needs</p>
+                        <p class="de">Entwickelt, um verschiedenen Hörbedürfnissen gerecht zu werden</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 class="en">Real-time Processing</h3>
+                        <h3 class="de">Echtzeit-Verarbeitung</h3>
+                        <p class="en">Hear changes to your audio immediately as you adjust settings</p>
+                        <p class="de">Höre Änderungen an deinem Audio sofort, wenn du Einstellungen anpasst</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="user-guide">
+                <h2 class="en">Getting Started</h2>
+                <h2 class="de">Erste Schritte</h2>
+
+                <div class="en">
+                    <p>After installation, you'll see the BrowserEQ icon in your
+                        browser
+                        toolbar. Click it to open the equalizer panel.</p>
+
+                    <h3>Basic Controls</h3>
+                    <ol>
+                        <li><strong>Preset Selection</strong>: Choose from ready-made sound profiles</li>
+                        <li><strong>Volume Control</strong>: Adjust the "Main" slider to control overall volume</li>
+                        <li><strong>Mute Button</strong>: Quickly silence all audio</li>
+                        <li><strong>Transport Controls</strong>: Control audio playback and recording</li>
+                        <li><strong>Mono/Stereo Toggle</strong>: Switch between stereo (normal) and mono (combines left
+                            and
+                            right channels)</li>
+                        <li><strong>Compact Mode Toggle</strong>: Switch between full and minimal interface</li>
+                    </ol>
+
+                    <h3>Understanding Filters</h3>
+                    <p>BrowserEQ gives you six different filters to shape your sound:</p>
+                    <ul>
+                        <li><strong>High Pass</strong>: Removes low rumbling sounds (like air conditioners, traffic
+                            noise)
+                        </li>
+                        <li><strong>Low Pass</strong>: Removes high-pitched sounds (like hiss, sibilance)</li>
+                        <li><strong>Band Pass</strong>: Lets you focus on just middle frequencies (great for voices)
+                        </li>
+                        <li><strong>Low Shelf</strong>: Adjusts the bass level without cutting it completely</li>
+                        <li><strong>High Shelf</strong>: Adjusts the treble/high frequencies</li>
+                        <li><strong>Peaking</strong>: Creates precise adjustments to specific frequency ranges</li>
+                    </ul>
+                    <p>Each filter has an on/off toggle, a frequency control (which sound frequencies to affect), and a
+                        secondary control (either Resonance, Bandwidth, or Gain).</p>
+                </div>
+
+                <div class="de">
+                    <p>Nach der Installation, siehst du das BrowserEQ-Symbol in
+                        deiner
+                        Browser-Symbolleiste. Klicke darauf, um das Equalizer-Panel zu öffnen.</p>
+
+                    <h3>Grundlegende Steuerung</h3>
+                    <ol>
+                        <li><strong>Voreinstellungsauswahl</strong>: Wähle aus vorgefertigten Klangprofilen</li>
+                        <li><strong>Lautstärkeregelung</strong>: Passe den "Main"-Schieberegler an, um die
+                            Gesamtlautstärke
+                            zu steuern</li>
+                        <li><strong>Stummschalt-Button</strong>: Schalte schnell alle Audioausgaben stumm</li>
+                        <li><strong>Transportsteuerung</strong>: Steuere die Audiowiedergabe und -aufnahme</li>
+                        <li><strong>Mono/Stereo-Umschalter</strong>: Wechsle zwischen Stereo (normal) und Mono
+                            (kombiniert
+                            linke und rechte Kanäle)</li>
+                        <li><strong>Kompaktmodus-Umschalter</strong>: Wechsle zwischen vollständiger und minimaler
+                            Benutzeroberfläche</li>
+                    </ol>
+
+                    <h3>Filter verstehen</h3>
+                    <p>BrowserEQ bietet dir sechs verschiedene Filter, um deinen Klang zu formen:</p>
+                    <ul>
+                        <li><strong>Hochpass</strong>: Entfernt tiefe Rumpelgeräusche (wie Klimaanlagen, Verkehrslärm)
+                        </li>
+                        <li><strong>Tiefpass</strong>: Entfernt hochfrequente Geräusche (wie Zischen, Zischlaute)</li>
+                        <li><strong>Bandpass</strong>: Ermöglicht es dir, dich nur auf mittlere Frequenzen zu
+                            konzentrieren
+                            (ideal für Stimmen)</li>
+                        <li><strong>Tiefen-Shelf</strong>: Passt den Basspegel an, ohne ihn vollständig zu entfernen
+                        </li>
+                        <li><strong>Höhen-Shelf</strong>: Passt die Höhenfrequenzen an</li>
+                        <li><strong>Peaking</strong>: Ermöglicht präzise Anpassungen an bestimmten Frequenzbereichen
+                        </li>
+                    </ul>
+                    <p>Jeder Filter hat einen Ein-/Ausschalter, eine Frequenzregelung (welche Frequenzen beeinflusst
+                        werden
+                        sollen) und eine sekundäre Regelung (entweder Resonanz, Bandbreite oder Verstärkung).</p>
+                </div>
+            </section>
+
+            <section id="accessibility">
+                <h2 class="en">Accessibility Features</h2>
+                <h2 class="de">Barrierefreiheitsfunktionen</h2>
+
+                <div class="en">
+                    <p>BrowserEQ was designed with accessibility in mind:</p>
+                    <ul>
+                        <li><strong>Hearing Accessibility</strong>: Customize audio to accommodate hearing sensitivities
+                            or
+                            impairments</li>
+                        <li><strong>Auditory Processing</strong>: Enhance clarity by filtering out distracting
+                            frequencies
+                        </li>
+                        <li><strong>Sensory Sensitivities</strong>: Reduce frequencies that trigger discomfort</li>
+                        <li><strong>Audio Balance</strong>: Correct for imbalanced audio in content</li>
+                    </ul>
+                </div>
+
+                <div class="de">
+                    <p>BrowserEQ wurde mit Blick auf Barrierefreiheit entwickelt:</p>
+                    <ul>
+                        <li><strong>Hörzugänglichkeit</strong>: Passe Audio an, um Hörsensibilitäten oder
+                            -beeinträchtigungen gerecht zu werden</li>
+                        <li><strong>Auditive Verarbeitung</strong>: Verbessere die Klarheit, indem du ablenkende
+                            Frequenzen
+                            herausfilterst</li>
+                        <li><strong>Sensorische Empfindlichkeiten</strong>: Reduziere Frequenzen, die Unbehagen auslösen
+                        </li>
+                        <li><strong>Audiobalance</strong>: Korrigiere unausgewogenes Audio in Inhalten</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Developer Guide Tab -->
+        <div id="developer-guide-tab" class="tab-content">
+            <section id="dev-introduction">
+                <div class="en">
+                    <h2>Developer Guide</h2>
+                    <p>This guide provides detailed information for developers who want to understand, modify, or
+                        contribute to the BrowserEQ project.</p>
+                </div>
+                <div class="de">
+                    <h2>Entwicklerhandbuch</h2>
+                    <p>Dieses Handbuch bietet detaillierte Informationen für Entwickler, die das BrowserEQ-Projekt
+                        verstehen, modifizieren oder dazu beitragen möchten.</p>
+                </div>
+            </section>
+
+            <section id="architecture">
+                <h2 class="en">Architecture Overview</h2>
+                <h2 class="de">Architekturübersicht</h2>
+
+                <div class="en">
+                    <p>BrowserEQ uses a Vue 3 frontend with the Composition API, combined with Web Audio API for audio
+                        processing. The extension follows a component-based architecture:</p>
+                    <div class="code-block">
+                        <pre>UI Components (Vue) → Audio Logic (TypeScript) → Web Audio API → Browser Audio</pre>
+                    </div>
+
+                    <h3>Key Components</h3>
+                    <ol>
+                        <li><strong>Popup.vue</strong>: The main component that renders the user interface and
+                            orchestrates the other components.</li>
+                        <li><strong>PresetManager.vue</strong>: Handles preset selection and management.</li>
+                        <li><strong>Strip.vue</strong>: Represents a single filter strip with its controls.</li>
+                        <li><strong>Slider.vue & Toggle.vue</strong>: Reusable UI controls.</li>
+                    </ol>
+
+                    <h3>Core Logic Modules</h3>
+                    <ol>
+                        <li><strong>audioProcessing.ts</strong>: Contains the Web Audio API implementation.</li>
+                        <li><strong>EQValues.ts</strong>: Defines the default presets.</li>
+                        <li><strong>presetStorage.ts</strong>: Manages storing preferences in localStorage.</li>
+                        <li><strong>recordingService.ts</strong>: Handles audio recording functionality.</li>
+                    </ol>
+                </div>
+
+                <div class="de">
+                    <p>BrowserEQ verwendet ein Vue 3 Frontend mit der Composition API, kombiniert mit der Web Audio API
+                        für die Audioverarbeitung. Die Erweiterung folgt einer komponentenbasierten Architektur:</p>
+                    <div class="code-block">
+                        <pre>UI-Komponenten (Vue) → Audio-Logik (TypeScript) → Web Audio API → Browser-Audio</pre>
+                    </div>
+
+                    <h3>Hauptkomponenten</h3>
+                    <ol>
+                        <li><strong>Popup.vue</strong>: Die Hauptkomponente, die die Benutzeroberfläche rendert und die
+                            anderen Komponenten orchestriert.</li>
+                        <li><strong>PresetManager.vue</strong>: Verwaltet die Voreinstellungsauswahl und -verwaltung.
+                        </li>
+                        <li><strong>Strip.vue</strong>: Repräsentiert einen einzelnen Filterstreifen mit seinen
+                            Steuerelementen.</li>
+                        <li><strong>Slider.vue & Toggle.vue</strong>: Wiederverwendbare UI-Steuerelemente.</li>
+                    </ol>
+
+                    <h3>Kern-Logikmodule</h3>
+                    <ol>
+                        <li><strong>audioProcessing.ts</strong>: Enthält die Web Audio API-Implementierung.</li>
+                        <li><strong>EQValues.ts</strong>: Definiert die Standardvoreinstellungen.</li>
+                        <li><strong>presetStorage.ts</strong>: Verwaltet die Speicherung von Einstellungen im
+                            localStorage.</li>
+                        <li><strong>recordingService.ts</strong>: Handhabt die Audio-Aufnahmefunktionalität.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section id="data-flow">
+                <h2 class="en">Data Flow</h2>
+                <h2 class="de">Datenfluss</h2>
+
+                <div class="en">
+                    <ol>
+                        <li>User interacts with UI components (sliders, toggles, buttons)</li>
+                        <li>Component emits events to parent (Popup.vue)</li>
+                        <li>Popup.vue updates the current preset state</li>
+                        <li>Audio processing logic applies changes to Web Audio nodes</li>
+                    </ol>
+
+                    <h3>Key Interfaces</h3>
+                    <p>The core data structures are defined in several places:</p>
+                    <div class="code-block">
+                        <pre>// EQ Preset structure
+interface EQPreset {
+  mainOut: {
+    gain: number;
+    muted: boolean;
+  };
+  filters: {
+    [key: string]: EQFilter;
+  };
+}
+
+// Individual filter structure
+interface EQFilter {
+  name: string;
+  type: BiquadFilterType;  // Web Audio API filter type
+  enabled: boolean;
+  frequency: {
+    value: number;
+  };
+  Q?: {
+    name: string;
+    value: number;
+  };
+  gain?: {
+    value: number;
+  };
+}</pre>
+                    </div>
+                </div>
+
+                <div class="de">
+                    <!-- German translation equivalent to English content above -->
+                    <ol>
+                        <li>Benutzer interagiert mit UI-Komponenten (Schieberegler, Umschalter, Buttons)</li>
+                        <li>Komponente sendet Ereignisse an übergeordnetes Element (Popup.vue)</li>
+                        <li>Popup.vue aktualisiert den aktuellen Voreinstellungsstatus</li>
+                        <li>Audio-Verarbeitungslogik wendet Änderungen auf Web Audio-Knoten an</li>
+                    </ol>
+
+                    <h3>Wichtige Schnittstellen</h3>
+                    <p>Die Kerndatenstrukturen sind an mehreren Stellen definiert:</p>
+                    <div class="code-block">
+                        <pre>// EQ-Voreinstellungsstruktur
+interface EQPreset {
+  mainOut: {
+    gain: number;
+    muted: boolean;
+  };
+  filters: {
+    [key: string]: EQFilter;
+  };
+}
+
+// Individuelle Filterstruktur
+interface EQFilter {
+  name: string;
+  type: BiquadFilterType;  // Web Audio API Filtertyp
+  enabled: boolean;
+  frequency: {
+    value: number;
+  };
+  Q?: {
+    name: string;
+    value: number;
+  };
+  gain?: {
+    value: number;
+  };
+}</pre>
+                    </div>
+                </div>
+            </section>
+
+            <section id="audio-processing">
+                <h2 class="en">Audio Processing Pipeline</h2>
+                <h2 class="de">Audio-Verarbeitungspipeline</h2>
+
+                <div class="en">
+                    <ol>
+                        <li><strong>Capture</strong>: The extension captures tab audio using
+                            <code>chrome.tabCapture</code>.
+                        </li>
+                        <li><strong>Source Creation</strong>: A MediaStreamAudioSourceNode is created from the capture.
+                        </li>
+                        <li><strong>Filter Chain</strong>: Audio is routed through various BiquadFilterNode instances
+                            based on user settings.</li>
+                        <li><strong>Gain Node</strong>: Final processing includes volume adjustment through a GainNode.
+                        </li>
+                        <li><strong>Output</strong>: Processed audio is sent to the AudioContext destination.</li>
+                    </ol>
+
+                    <div class="code-block">
+                        <pre>MediaStreamSource → [Enabled Filters] → GainNode → AudioContext.destination</pre>
+                    </div>
+
+                    <h3>Filter Connectivity Logic</h3>
+                    <p>The system dynamically connects and disconnects filters when users toggle them:</p>
+                    <ol>
+                        <li>When enabling a filter, it's inserted into the chain at the appropriate point.</li>
+                        <li>When disabling a filter, it's bypassed, and the chain is reconnected.</li>
+                        <li>The <code>lastFilter</code> reference always points to the last active filter in the chain.
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="de">
+                    <ol>
+                        <li><strong>Erfassung</strong>: Die Erweiterung erfasst Tab-Audio mit
+                            <code>chrome.tabCapture</code>.
+                        </li>
+                        <li><strong>Quellenerstellung</strong>: Ein MediaStreamAudioSourceNode wird aus der Erfassung
+                            erstellt.</li>
+                        <li><strong>Filterkette</strong>: Audio wird durch verschiedene BiquadFilterNode-Instanzen
+                            basierend auf Benutzereinstellungen geleitet.</li>
+                        <li><strong>Verstärkungsknoten</strong>: Abschließende Verarbeitung umfasst Lautstärkeanpassung
+                            durch einen GainNode.</li>
+                        <li><strong>Ausgabe</strong>: Verarbeitetes Audio wird an das AudioContext-Ziel gesendet.</li>
+                    </ol>
+
+                    <div class="code-block">
+                        <pre>MediaStreamSource → [Aktivierte Filter] → GainNode → AudioContext.destination</pre>
+                    </div>
+
+                    <h3>Filterverbindungslogik</h3>
+                    <p>Das System verbindet und trennt Filter dynamisch, wenn Benutzer sie umschalten:</p>
+                    <ol>
+                        <li>Beim Aktivieren eines Filters wird er an der entsprechenden Stelle in die Kette eingefügt.
+                        </li>
+                        <li>Beim Deaktivieren eines Filters wird er umgangen, und die Kette wird neu verbunden.</li>
+                        <li>Die <code>lastFilter</code>-Referenz zeigt immer auf den letzten aktiven Filter in der
+                            Kette.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- More developer guide sections can be added here -->
+
+            <section id="build-and-test">
+                <h2 class="en">Build Process</h2>
+                <h2 class="de">Build-Prozess</h2>
+
+                <div class="en">
+                    <p>The project uses Vite for building:</p>
+                    <div class="code-block">
+                        <pre># Install dependencies
+npm install
+
+# Development build with hot-reload
+npm run dev
+
+# Production build
+npm run build
+
+# Run tests
+npm test</pre>
+                    </div>
+
+                    <h3>Testing</h3>
+                    <p>We recommend testing your changes in these scenarios:</p>
+                    <ol>
+                        <li><strong>Different Content Types</strong>: Test with music, voice calls, videos, etc.</li>
+                        <li><strong>Edge Cases</strong>: Test with extreme filter settings and combinations.</li>
+                        <li><strong>Performance</strong>: Ensure changes don't cause audio glitches or high CPU usage.
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="de">
+                    <p>Das Projekt verwendet Vite zum Erstellen:</p>
+                    <div class="code-block">
+                        <pre># Abhängigkeiten installieren
+npm install
+
+# Entwicklungsbuild mit Hot-Reload
+npm run dev
+
+# Produktionsbuild
+npm run build
+
+# Tests ausführen
+npm test</pre>
+                    </div>
+
+                    <h3>Testen</h3>
+                    <p>Wir empfehlen, Ihre Änderungen in diesen Szenarien zu testen:</p>
+                    <ol>
+                        <li><strong>Verschiedene Inhaltstypen</strong>: Testen Sie mit Musik, Sprachanrufen, Videos usw.
+                        </li>
+                        <li><strong>Randfälle</strong>: Testen Sie mit extremen Filtereinstellungen und Kombinationen.
+                        </li>
+                        <li><strong>Leistung</strong>: Stellen Sie sicher, dass Änderungen keine Audioprobleme oder hohe
+                            CPU-Auslastung verursachen.</li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+        <!-- Examples Tab -->
+        <div id="examples-tab" class="tab-content">
+            <section id="example-intro">
+                <div class="en">
+                    <h2>BrowserEQ in Action</h2>
+                    <p>Watch these examples to see how BrowserEQ can enhance your audio experience in different
+                        scenarios.</p>
+                    <div class="instruction-box">
+                        <h3>Try It Yourself</h3>
+                        <p>After installing BrowserEQ, play these videos and experiment with the relevant presets to
+                            hear the difference in real-time.
+                            Open the BrowserEQ panel by clicking its icon in your browser toolbar, select an appropriate
+                            preset, and adjust the settings
+                            as demonstrated in the videos. This hands-on approach will help you better understand how
+                            each feature works with actual content.</p>
+                    </div>
+                </div>
+                <div class="de">
+                    <h2>BrowserEQ in Aktion</h2>
+                    <p>Schau dir diese Beispiele an, um zu sehen, wie BrowserEQ dein Audioerlebnis in verschiedenen
+                        Szenarien verbessern kann.</p>
+                    <div class="instruction-box">
+                        <h3>Probiere es selbst aus</h3>
+                        <p>Nach der Installation von BrowserEQ kannst du diese Videos abspielen und mit den
+                            entsprechenden Voreinstellungen
+                            experimentieren, um den Unterschied in Echtzeit zu hören. Öffne das BrowserEQ-Panel durch
+                            Klicken auf das Symbol
+                            in der Browser-Symbolleiste, wähle eine passende Voreinstellung und passe die Einstellungen
+                            wie in den Videos gezeigt an.
+                            Diese praktische Vorgehensweise wird dir helfen, besser zu verstehen, wie jede Funktion mit
+                            tatsächlichen Inhalten funktioniert.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="video-demonstrations">
+                <!-- Example 1: Voice Clarity section -->
+                <div class="video-example">
+                    <div class="en">
+                        <h3>Voice Clarity and Noise Reduction</h3>
+                        <p>BrowserEQ excels at enhancing voice intelligibility in video conferences, online meetings,
+                            and webinars.
+                            This demonstration shows how to eliminate background noise, reduce echo, and enhance speech
+                            frequencies
+                            for crystal-clear communication. Perfect for improving hard-to-hear speakers or using your
+                            computer in
+                            noisy environments.</p>
+                    </div>
+                    <div class="de">
+                        <h3>Sprachklarheit und Rauschunterdrückung</h3>
+                        <p>BrowserEQ ist hervorragend darin, die Sprachverständlichkeit in Videokonferenzen,
+                            Online-Meetings und Webinaren zu verbessern. Diese Demonstration zeigt, wie
+                            Hintergrundgeräusche
+                            eliminiert, Echo reduziert und Sprachfrequenzen für kristallklare Kommunikation verstärkt
+                            werden können.
+                            Ideal zur Verbesserung schwer zu hörender Sprecher oder für die Verwendung Ihres Computers
+                            in
+                            geräuschvollen Umgebungen.</p>
+                    </div>
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/NM-zWTU7X-k"
+                            title="BrowserEQ Noise Reduction Demo" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Example 2: Stereo/Mono section -->
+                <div class="video-example">
+                    <div class="en">
+                        <h3>Stereo/Mono Conversion</h3>
+                        <p>The Stereo/Mono switch is a powerful accessibility feature that combines left and right audio
+                            channels.
+                            This demonstration shows how it benefits users with unilateral hearing loss, helps when
+                            using a single
+                            earbud, and improves audio where stereo separation is too extreme. Learn how to switch
+                            between stereo and
+                            mono modes, and when each setting is most beneficial for your listening situation.</p>
+                    </div>
+                    <div class="de">
+                        <h3>Stereo/Mono-Umwandlung</h3>
+                        <p>Der Stereo/Mono-Schalter ist eine leistungsstarke Barrierefreiheitsfunktion, die den linken
+                            und rechten Audiokanal kombiniert. Diese Demonstration zeigt, wie er Nutzern mit einseitigem
+                            Hörverlust
+                            hilft, die Nutzung mit nur einem Ohrhörer verbessert und Audio optimiert, bei dem die
+                            Stereo-Trennung zu
+                            extrem ist. Erfahren Sie, wie man zwischen Stereo- und Mono-Modi wechselt und wann welche
+                            Einstellung für
+                            Ihre Hörsituation am vorteilhaftesten ist.</p>
+                    </div>
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/YwNs1Z0qRY0"
+                            title="BrowserEQ Stereo / Mono Demo" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <!-- Example 3: Music Listening and Frequency Adjustment -->
+                <div class="video-example">
+                    <div class="en">
+                        <h3>Music Enhancement and Timbral Control</h3>
+                        <p>Transform your music listening experience with BrowserEQ's precise frequency controls. This
+                            demonstration shows how
+                            to adjust specific frequency ranges to enhance bass response, brighten vocals, or completely
+                            reshape the timbral
+                            quality of any music. Learn how to create custom sound signatures for different genres,
+                            compensate for headphone
+                            or speaker deficiencies, and discover new sonic details in your favorite tracks.</p>
+                    </div>
+                    <div class="de">
+                        <h3>Musikverbesserung und Klangfarbensteuerung</h3>
+                        <p>Verwandeln Sie Ihr Musikhörerlebnis mit den präzisen Frequenzreglern von BrowserEQ. Diese
+                            Demonstration zeigt, wie
+                            man bestimmte Frequenzbereiche anpasst, um die Bassansprache zu verbessern, Gesang
+                            aufzuhellen oder die Klangqualität
+                            jeder Musik komplett neu zu gestalten. Erfahren Sie, wie Sie maßgeschneiderte
+                            Klangsignaturen für verschiedene Genres
+                            erstellen, Defizite von Kopfhörern oder Lautsprechern ausgleichen und neue klangliche
+                            Details in Ihren
+                            Lieblingsstücken entdecken können.</p>
+                    </div>
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/sSy2Lat3OdE"
+                            title="BrowserEQ Music Enhancement Demo" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen></iframe>
+                    </div>
+                </div>
+
+
+            </section>
+        </div>
+
+        <!-- Contributing Tab -->
+        <div id="contributing-tab" class="tab-content">
+            <section id="contribute">
+                <h2 class="en">Contributing to BrowserEQ</h2>
+                <h2 class="de">Beitrag zu BrowserEQ leisten</h2>
+
+                <div class="en">
+                    <p>We welcome contributions to BrowserEQ! There are many ways to contribute, from reporting bugs and
+                        improving documentation to adding new features.</p>
+
+                    <h3>Bug Reports & Feature Requests</h3>
+                    <p>Please use the GitHub issue tracker to report bugs or suggest features. When reporting a bug,
+                        include:</p>
+                    <ul>
+                        <li>Your browser version</li>
+                        <li>BrowserEQ version</li>
+                        <li>Steps to reproduce the issue</li>
+                        <li>Expected vs actual behavior</li>
+                        <li>Any relevant screenshots or console logs</li>
+                    </ul>
+
+                    <h3>Development Process</h3>
+                    <ol>
+                        <li>Fork the repository</li>
+                        <li>Create a new branch for your feature (<code>git checkout -b feature/amazing-feature</code>)
+                        </li>
+                        <li>Make your changes</li>
+                        <li>Add tests if applicable</li>
+                        <li>Commit your changes (<code>git commit -m 'Add some amazing feature'</code>)</li>
+                        <li>Push to the branch (<code>git push origin feature/amazing-feature</code>)</li>
+                        <li>Create a Pull Request</li>
+                    </ol>
+
+                    <h3>Code Style Guidelines</h3>
+                    <ul>
+                        <li>Follow the existing code style</li>
+                        <li>Use TypeScript's type system</li>
+                        <li>Write comments for complex logic</li>
+                        <li>Use descriptive variable and function names</li>
+                    </ul>
+
+                    <h3>License</h3>
+                    <p>By contributing to BrowserEQ, you agree that your contributions will be licensed under the
+                        project's BrowserEQ Strong Copyleft License. This license ensures that the software and all
+                        derivatives remain
+                        perpetually free and open source, and prohibits any commercial exploitation or future
+                        relicensing.</p>
+                </div>
+
+                <div class="de">
+                    <p>Wir begrüßen Beiträge zu BrowserEQ! Es gibt viele Möglichkeiten, einen Beitrag zu leisten, von
+                        der Meldung von Fehlern und der Verbesserung der Dokumentation bis hin zum Hinzufügen neuer
+                        Funktionen.</p>
+
+                    <h3>Fehlermeldungen & Funktionsanfragen</h3>
+                    <p>Bitte verwende den GitHub Issue Tracker, um Fehler zu melden oder Funktionen vorzuschlagen. Bei
+                        der Meldung eines Fehlers bitte angeben:</p>
+                    <ul>
+                        <li>Deine Browser-Version</li>
+                        <li>BrowserEQ-Version</li>
+                        <li>Schritte zur Reproduktion des Problems</li>
+                        <li>Erwartetes vs. tatsächliches Verhalten</li>
+                        <li>Alle relevanten Screenshots oder Konsolenprotokolle</li>
+                    </ul>
+
+                    <h3>Entwicklungsprozess</h3>
+                    <ol>
+                        <li>Forke das Repository</li>
+                        <li>Erstelle einen neuen Branch für deine Funktion
+                            (<code>git checkout -b feature/amazing-feature</code>)</li>
+                        <li>Nimm deine Änderungen vor</li>
+                        <li>Füge Tests hinzu, falls zutreffend</li>
+                        <li>Committe deine Änderungen (<code>git commit -m 'Add some amazing feature'</code>)</li>
+                        <li>Push in den Branch (<code>git push origin feature/amazing-feature</code>)</li>
+                        <li>Erstelle einen Pull Request</li>
+                    </ol>
+
+                    <h3>Code-Stil-Richtlinien</h3>
+                    <ul>
+                        <li>Folge dem bestehenden Code-Stil</li>
+                        <li>Verwende das Typsystem von TypeScript</li>
+                        <li>Schreibe Kommentare für komplexe Logik</li>
+                        <li>Verwende beschreibende Variablen- und Funktionsnamen</li>
+                    </ul>
+
+                    <h3>Lizenz</h3>
+                    <p>Durch das Beitragen zu BrowserEQ stimmst du zu, dass deine Beiträge unter der
+                        BrowserEQ Strong Copyleft License des Projekts lizenziert werden. Diese Lizenz stellt sicher,
+                        dass die
+                        Software und alle Derivate dauerhaft frei und Open Source bleiben und verbietet jegliche
+                        kommerzielle
+                        Ausbeutung oder zukünftige Relizenzierung.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="sponsors">
+                <p class="en">Supported by:</p>
+                <p class="de">Unterstützt von:</p>
+                <div class="sponsor-logos">
+                    <!-- Internet in Farbe logo with language-specific versions -->
+                    <a href="https://www.bmbf.de/DE/Home/home_node.html" target="_blank">
+                        <!-- Each logo is controlled by language class visibility -->
+                        <img src="./images/internet_in_farbe_en.jpg" alt="Internet in Farbe Logo"
+                            class="sponsor-logo en-only">
+                        <img src="./images/internet_in_farbe_de.jpg" alt="Internet in Farbe Logo"
+                            class="sponsor-logo de-only">
+                    </a>
+                    <!-- PrototypeFund logo -->
+                    <a href="https://prototypefund.de" target="_blank">
+                        <img src="./images/PrototypeFund-Logo.png" alt="PrototypeFund Logo" class="sponsor-logo">
+                    </a>
+                </div>
+            </div>
+            <div class="en">
+                <p>BrowserEQ v2 - <a href="https://berraknil.github.io">Berrak Nil</a></p>
+            </div>
+            <div class="de">
+                <p>BrowserEQ v2 - <a href="https://berraknil.github.io">Berrak Nil</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function setLanguage(lang) {
+            if (lang === 'de') {
+                document.body.classList.add('german');
+                // Update buttons
+                document.getElementById('de-btn').classList.add('active');
+                document.getElementById('en-btn').classList.remove('active');
+                document.getElementById('floating-de-btn').classList.add('active');
+                document.getElementById('floating-en-btn').classList.remove('active');
+
+                // Hide English logos, show German logos
+                document.querySelectorAll('.en-only').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.de-only').forEach(el => el.style.display = 'block');
+            } else {
+                document.body.classList.remove('german');
+                // Update buttons
+                document.getElementById('en-btn').classList.add('active');
+                document.getElementById('de-btn').classList.remove('active');
+                document.getElementById('floating-en-btn').classList.add('active');
+                document.getElementById('floating-de-btn').classList.remove('active');
+
+                // Hide German logos, show English logos
+                document.querySelectorAll('.en-only').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.de-only').forEach(el => el.style.display = 'none');
+            }
+        }
+
+        // Initialize logo visibility
+        window.addEventListener('DOMContentLoaded', function () {
+            // Set initial logo visibility based on language
+            const isGerman = document.body.classList.contains('german');
+            document.querySelectorAll('.en-only').forEach(el => el.style.display = isGerman ? 'none' : 'block');
+            document.querySelectorAll('.de-only').forEach(el => el.style.display = isGerman ? 'block' : 'none');
+        });
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Back to top button
+        var backToTopButton = document.createElement('div');
+        backToTopButton.className = 'back-to-top';
+        backToTopButton.innerHTML = '↑';
+        document.body.appendChild(backToTopButton);
+
+        // Header height for scroll calculations
+        var headerHeight = document.querySelector('header').offsetHeight;
+        var floatingLangToggle = document.getElementById('floating-lang-toggle');
+
+        // Updated scroll handler to manage both buttons
+        window.onscroll = function () {
+            var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+
+            // Back to top button
+            if (scrollTop > 20) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+
+            // Floating language toggle - only show when scrolled past header
+            if (scrollTop > headerHeight) {
+                floatingLangToggle.classList.add('visible');
+            } else {
+                floatingLangToggle.classList.remove('visible');
+            }
+        };
+
+        backToTopButton.onclick = function () {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        };
+    </script>
+</body>
+
+</html>

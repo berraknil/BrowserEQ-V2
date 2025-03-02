@@ -1,0 +1,76 @@
+                    BROWSEREQ STRONG COPYLEFT LICENSE
+                       Version 1.0, August 2023
+
+Copyright (C) 2023 BrowserEQ Contributors
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of this license with the following terms and conditions:
+
+1. REDISTRIBUTION AND MODIFICATION
+   You may copy, distribute, and modify the software under the terms of this
+   license, provided that:
+
+   a. You distribute the complete source code of any work based on or containing
+      portions of this software.
+   
+   b. Any modifications you make must be released under this exact same license.
+      No changes to the license terms are permitted.
+   
+   c. You clearly document all changes you make to the original software.
+
+   d. You preserve all copyright and license notices in all copies or 
+      substantial portions of the software.
+
+2. NO COMMERCIAL USE
+   This software, including any derivatives, modifications, or portions thereof:
+
+   a. May not be sold, licensed, sublicensed, or distributed for a fee.
+   
+   b. May not be bundled with or included in any product, service, or offering
+      that charges any monetary compensation.
+   
+   c. May not be used to provide commercial services or products.
+
+3. LICENSING PERMANENCE
+   a. This license applies in perpetuity to the software and all derivatives.
+   
+   b. No derivative work, modification, or redistribution of this software may
+      change the license terms or choose a different license.
+   
+   c. Any attempt to relicense this software or its derivatives under any other
+      terms is explicitly prohibited and void.
+
+4. PATENT LICENSE
+   Each contributor grants you a perpetual, worldwide, non-exclusive, 
+   royalty-free patent license to make, use, sell, offer for sale, import,
+   and otherwise transfer the software, where such license applies only to
+   those patent claims licensable by such contributor that are necessarily
+   infringed by their contribution(s) alone or by combination of their
+   contribution(s) with the software to which such contribution(s) was submitted.
+
+5. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+   USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+6. ATTRIBUTION
+   Any distribution of the software or derivative works must include appropriate
+   attribution to the original creators with a link to the original project
+   repository.
+
+7. DEFINITIONS
+   a. "Software" refers to BrowserEQ and all its components, source code,
+      documentation, and accompanying materials.
+   
+   b. "Derivative work" means any work based on or incorporating all or part of
+      the Software.
+
+8. TERMINATION
+   Your rights under this license will terminate automatically if you fail to
+   comply with any of its terms.
+
+For questions about this license, please contact the project maintainers.

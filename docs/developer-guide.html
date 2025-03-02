@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Guide - BrowserEQ V2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="wave-decoration"></div>
+        <div class="language-toggle">
+            <button onclick="setLanguage('en')" class="active" id="en-btn">English</button>
+            <button onclick="setLanguage('de')" id="de-btn">Deutsch</button>
+        </div>
+        <div class="container">
+            <h1>BrowserEQ V2</h1>
+            <p class="en">Developer Guide</p>
+            <p class="de">Entwicklerhandbuch</p>
+            <div class="github-buttons">
+                <a href="index.html">Home</a>
+                <a href="https://github.com/berraknil/BrowserEQ-V2" target="_blank">View on GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#data-flow">Data Flow</a></li>
+            <li><a href="#audio-processing">Audio Processing</a></li>
+            <li><a href="#presets">Presets</a></li>
+            <li><a href="#adding-features">Adding Features</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <section id="introduction">
+            <div class="en">
+                <p>This guide provides detailed information for developers who want to understand, modify, or contribute
+                    to the BrowserEQ project.</p>
+            </div>
+            <div class="de">
+                <p>Dieses Handbuch bietet detaillierte Informationen für Entwickler, die das BrowserEQ-Projekt
+                    verstehen, modifizieren oder dazu beitragen möchten.</p>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2 class="en">Architecture Overview</h2>
+            <h2 class="de">Architekturübersicht</h2>
+
+            <div class="en">
+                <p>BrowserEQ uses a Vue 3 frontend with the Composition API, combined with Web Audio API for audio
+                    processing. The extension follows a component-based architecture:</p>
+                <div class="code-block">
+                    <pre>UI Components (Vue) → Audio Logic (TypeScript) → Web Audio API → Browser Audio</pre>
+                </div>
+
+                <h3>Key Components</h3>
+                <ol>
+                    <li><strong>Popup.vue</strong>: The main component that renders the user interface and orchestrates
+                        the other components.</li>
+                    <li><strong>PresetManager.vue</strong>: Handles preset selection and management.</li>
+                    <li><strong>Strip.vue</strong>: Represents a single filter strip with its controls.</li>
+                    <li><strong>Slider.vue & Toggle.vue</strong>: Reusable UI controls.</li>
+                </ol>
+
+                <h3>Core Logic Modules</h3>
+                <ol>
+                    <li><strong>audioProcessing.ts</strong>: Contains the Web Audio API implementation.</li>
+                    <li><strong>EQValues.ts</strong>: Defines the default presets.</li>
+                    <li><strong>presetStorage.ts</strong>: Manages storing preferences in localStorage.</li>
+                    <li><strong>recordingService.ts</strong>: Handles audio recording functionality.</li>
+                </ol>
+            </div>
+
+            <div class="de">
+                <p>BrowserEQ verwendet ein Vue 3 Frontend mit der Composition API, kombiniert mit der Web Audio API für
+                    die Audioverarbeitung. Die Erweiterung folgt einer komponentenbasierten Architektur:</p>
+                <div class="code-block">
+                    <pre>UI-Komponenten (Vue) → Audio-Logik (TypeScript) → Web Audio API → Browser-Audio</pre>
+                </div>
+
+                <h3>Hauptkomponenten</h3>
+                <ol>
+                    <li><strong>Popup.vue</strong>: Die Hauptkomponente, die die Benutzeroberfläche rendert und die
+                        anderen Komponenten orchestriert.</li>
+                    <li><strong>PresetManager.vue</strong>: Verwaltet die Voreinstellungsauswahl und -verwaltung.</li>
+                    <li><strong>Strip.vue</strong>: Repräsentiert einen einzelnen Filterstreifen mit seinen
+                        Steuerelementen.</li>
+                    <li><strong>Slider.vue & Toggle.vue</strong>: Wiederverwendbare UI-Steuerelemente.</li>
+                </ol>
+
+                <h3>Kern-Logikmodule</h3>
+                <ol>
+                    <li><strong>audioProcessing.ts</strong>: Enthält die Web Audio API-Implementierung.</li>
+                    <li><strong>EQValues.ts</strong>: Definiert die Standardvoreinstellungen.</li>
+                    <li><strong>presetStorage.ts</strong>: Verwaltet die Speicherung von Einstellungen im localStorage.
+                    </li>
+                    <li><strong>recordingService.ts</strong>: Handhabt die Audio-Aufnahmefunktionalität.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="data-flow">
+            <h2 class="en">Data Flow</h2>
+            <h2 class="de">Datenfluss</h2>
+
+            <div class="en">
+                <ol>
+                    <li>User interacts with UI components (sliders, toggles, buttons)</li>
+                    <li>Component emits events to parent (Popup.vue)</li>
+                    <li>Popup.vue updates the current preset state</li>
+                    <li>Audio processing logic applies changes to Web Audio nodes</li>
+                    <li>Preferences can be stored in localStorage</li>
+                </ol>
+
+                <h3>Key Interfaces</h3>
+                <p>The core data structures are defined in several places:</p>
+                <div class="code-block">
+                    <pre>// EQ Preset structure
+interface EQPreset {
+  mainOut: {
+    gain: number;
+    muted: boolean;
+  };
+  filters: {
+    [key: string]: EQFilter;
+  };
+}
+
+// Individual filter structure
+interface EQFilter {
+  name: string;
+  type: BiquadFilterType;  // Web Audio API filter type
+  enabled: boolean;
+  frequency: {
+    value: number;
+  };
+  Q?: {
+    name: string;
+    value: number;
+  };
+  gain?: {
+    value: number;
+  };
+}</pre>
+                </div>
+            </div>
+
+            <div class="de">
+                <ol>
+                    <li>Benutzer interagiert mit UI-Komponenten (Schieberegler, Umschalter, Buttons)</li>
+                    <li>Komponente sendet Ereignisse an übergeordnetes Element (Popup.vue)</li>
+                    <li>Popup.vue aktualisiert den aktuellen Voreinstellungsstatus</li>
+                    <li>Audio-Verarbeitungslogik wendet Änderungen auf Web Audio-Knoten an</li>
+                    <li>Einstellungen können im localStorage gespeichert werden</li>
+                </ol>
+
+                <h3>Wichtige Schnittstellen</h3>
+                <p>Die Kerndatenstrukturen sind an mehreren Stellen definiert:</p>
+                <div class="code-block">
+                    <pre>// EQ-Voreinstellungsstruktur
+interface EQPreset {
+  mainOut: {
+    gain: number;
+    muted: boolean;
+  };
+  filters: {
+    [key: string]: EQFilter;
+  };
+}
+
+// Individuelle Filterstruktur
+interface EQFilter {
+  name: string;
+  type: BiquadFilterType;  // Web Audio API Filtertyp
+  enabled: boolean;
+  frequency: {
+    value: number;
+  };
+  Q?: {
+    name: string;
+    value: number;
+  };
+  gain?: {
+    value: number;
+  };
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="audio-processing">
+            <h2 class="en">Audio Processing Pipeline</h2>
+            <h2 class="de">Audio-Verarbeitungspipeline</h2>
+
+            <div class="en">
+                <ol>
+                    <li><strong>Capture</strong>: The extension captures tab audio using <code>chrome.tabCapture</code>.
+                    </li>
+                    <li><strong>Source Creation</strong>: A MediaStreamAudioSourceNode is created from the capture.</li>
+                    <li><strong>Filter Chain</strong>: Audio is routed through various BiquadFilterNode instances based
+                        on user settings.</li>
+                    <li><strong>Gain Node</strong>: Final processing includes volume adjustment through a GainNode.</li>
+                    <li><strong>Output</strong>: Processed audio is sent to the AudioContext destination.</li>
+                </ol>
+
+                <div class="code-block">
+                    <pre>MediaStreamSource → [Enabled Filters] → GainNode → AudioContext.destination</pre>
+                </div>
+
+                <h3>Filter Connectivity Logic</h3>
+                <p>The system dynamically connects and disconnects filters when users toggle them:</p>
+                <ol>
+                    <li>When enabling a filter, it's inserted into the chain at the appropriate point.</li>
+                    <li>When disabling a filter, it's bypassed, and the chain is reconnected.</li>
+                    <li>The <code>lastFilter</code> reference always points to the last active filter in the chain.</li>
+                </ol>
+            </div>
+
+            <div class="de">
+                <ol>
+                    <li><strong>Erfassung</strong>: Die Erweiterung erfasst Tab-Audio mit
+                        <code>chrome.tabCapture</code>.
+                    </li>
+                    <li><strong>Quellenerstellung</strong>: Ein MediaStreamAudioSourceNode wird aus der Erfassung
+                        erstellt.</li>
+                    <li><strong>Filterkette</strong>: Audio wird durch verschiedene BiquadFilterNode-Instanzen basierend
+                        auf Benutzereinstellungen geleitet.</li>
+                    <li><strong>Verstärkungsknoten</strong>: Abschließende Verarbeitung umfasst Lautstärkeanpassung
+                        durch einen GainNode.</li>
+                    <li><strong>Ausgabe</strong>: Verarbeitetes Audio wird an das AudioContext-Ziel gesendet.</li>
+                </ol>
+
+                <div class="code-block">
+                    <pre>MediaStreamSource → [Aktivierte Filter] → GainNode → AudioContext.destination</pre>
+                </div>
+
+                <h3>Filterverbindungslogik</h3>
+                <p>Das System verbindet und trennt Filter dynamisch, wenn Benutzer sie umschalten:</p>
+                <ol>
+                    <li>Beim Aktivieren eines Filters wird er an der entsprechenden Stelle in die Kette eingefügt.</li>
+                    <li>Beim Deaktivieren eines Filters wird er umgangen, und die Kette wird neu verbunden.</li>
+                    <li>Die <code>lastFilter</code>-Referenz zeigt immer auf den letzten aktiven Filter in der Kette.
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="presets">
+            <h2 class="en">Preset Management</h2>
+            <h2 class="de">Voreinstellungsverwaltung</h2>
+
+            <div class="en">
+                <p>The preset system works as follows:</p>
+                <ol>
+                    <li>Default presets are defined in <code>EQValues.ts</code> and serve as the source of truth.</li>
+                    <li>User preferences may be stored in localStorage for persistence between sessions.</li>
+                </ol>
+
+                <h3>Deep Copy Implementation</h3>
+                <p>To avoid reference issues, presets are deep-copied using a custom function:</p>
+                <div class="code-block">
+                    <pre>function deepCopyPreset(preset: EQPreset): EQPreset {
+  // Creates a new object with all nested properties copied
+  // This prevents issues with shared references
+}</pre>
+                </div>
+
+                <h3>Reactive State Management</h3>
+                <p>The extension uses Vue 3's reactivity system:</p>
+                <ol>
+                    <li><code>ref</code> and <code>computed</code> are used for reactive state.</li>
+                    <li>Watchers (<code>watch</code>) observe changes to critical values like sliders.</li>
+                    <li>Two-way binding with <code>v-model</code> connects UI elements to state.</li>
+                </ol>
+
+                <h3>LocalStorage Schema</h3>
+                <p>Preferences are stored in localStorage for persistence:</p>
+                <div class="code-block">
+                    <pre>// Key format example
+{
+  "selectedPreset": "Neutral",
+  // other settings...
+}</pre>
+                </div>
+            </div>
+
+            <div class="de">
+                <p>Das Voreinstellungssystem funktioniert wie folgt:</p>
+                <ol>
+                    <li>Standardvoreinstellungen sind in <code>EQValues.ts</code> definiert und dienen als Quelle der
+                        Wahrheit.</li>
+                    <li>Benutzereinstellungen können im localStorage für die Persistenz zwischen Sitzungen gespeichert
+                        werden.</li>
+                </ol>
+
+                <h3>Deep-Copy-Implementierung</h3>
+                <p>Um Referenzprobleme zu vermeiden, werden Voreinstellungen mit einer benutzerdefinierten Funktion tief
+                    kopiert:</p>
+                <div class="code-block">
+                    <pre>function deepCopyPreset(preset: EQPreset): EQPreset {
+  // Erstellt ein neues Objekt mit allen verschachtelten Eigenschaften kopiert
+  // Dies verhindert Probleme mit gemeinsam genutzten Referenzen
+}</pre>
+                </div>
+
+                <h3>Reaktive Zustandsverwaltung</h3>
+                <p>Die Erweiterung verwendet das Reaktivitätssystem von Vue 3:</p>
+                <ol>
+                    <li><code>ref</code> und <code>computed</code> werden für den reaktiven Zustand verwendet.</li>
+                    <li>Beobachter (<code>watch</code>) überwachen Änderungen an kritischen Werten wie Schiebereglern.
+                    </li>
+                    <li>Zwei-Wege-Bindung mit <code>v-model</code> verbindet UI-Elemente mit dem Zustand.</li>
+                </ol>
+
+                <h3>LocalStorage-Schema</h3>
+                <p>Einstellungen werden im localStorage für die Persistenz gespeichert:</p>
+                <div class="code-block">
+                    <pre>// Schlüsselformat-Beispiel
+{
+  "selectedPreset": "Neutral",
+  // andere Einstellungen...
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="adding-features">
+            <h2 class="en">Adding New Features</h2>
+            <h2 class="de">Neue Funktionen hinzufügen</h2>
+
+            <div class="en">
+                <h3>Adding a New Preset</h3>
+                <ol>
+                    <li>Add the preset definition to <code>EQValues.ts</code>:
+                        <div class="code-block">
+                            <pre>NewPreset: {
+  mainOut: { gain: 1.0, muted: false },
+  filters: {
+    // Define filter settings
+  }
+}</pre>
+                        </div>
+                    </li>
+                    <li>The UI will automatically include the new preset in the dropdown menu.</li>
+                </ol>
+
+                <h3>Adding a New Filter Type</h3>
+                <ol>
+                    <li>Add the filter to the base preset in <code>EQValues.ts</code>.</li>
+                    <li>Create UI elements in <code>Popup.vue</code> for the new filter.</li>
+                    <li>Update <code>audioProcessing.ts</code> to handle the new filter type.</li>
+                    <li>Update related logic as needed.</li>
+                </ol>
+
+                <h3>Common Pitfalls</h3>
+                <ol>
+                    <li><strong>Reference Issues</strong>: Always use deep copies when working with preset objects to
+                        avoid unintended changes.</li>
+                    <li><strong>Web Audio API Timing</strong>: Be aware that some audio operations must be carefully
+                        timed to avoid clicks and pops.</li>
+                    <li><strong>Chrome Extension Context</strong>: Remember that the extension runs in an isolated
+                        context with security restrictions.</li>
+                </ol>
+            </div>
+
+            <div class="de">
+                <h3>Hinzufügen einer neuen Voreinstellung</h3>
+                <ol>
+                    <li>Fügen Sie die Voreinstellungsdefinition zu <code>EQValues.ts</code> hinzu:
+                        <div class="code-block">
+                            <pre>NewPreset: {
+  mainOut: { gain: 1.0, muted: false },
+  filters: {
+    // Filtereinstellungen definieren
+  }
+}</pre>
+                        </div>
+                    </li>
+                    <li>Die Benutzeroberfläche wird die neue Voreinstellung automatisch im Dropdown-Menü aufnehmen.</li>
+                </ol>
+
+                <h3>Hinzufügen eines neuen Filtertyps</h3>
+                <ol>
+                    <li>Füge den Filter zur Basisvoreinstellung in <code>EQValues.ts</code> hinzu.</li>
+                    <li>Erstelle UI-Elemente in <code>Popup.vue</code> für den neuen Filter.</li>
+                    <li>Aktualisiere <code>audioProcessing.ts</code>, um den neuen Filtertyp zu handhaben.</li>
+                    <li>Aktualisiere die zugehörige Logik nach Bedarf.</li>
+                </ol>
+
+                <h3>Häufige Fallstricke</h3>
+                <ol>
+                    <li><strong>Referenzprobleme</strong>: Verwenden Sie immer tiefe Kopien, wenn Sie mit
+                        Voreinstellungsobjekten arbeiten, um unbeabsichtigte Änderungen zu vermeiden.</li>
+                    <li><strong>Web Audio API Timing</strong>: Beachten Sie, dass einige Audiooperationen sorgfältig
+                        zeitlich abgestimmt werden müssen, um Klicks und Knackgeräusche zu vermeiden.</li>
+                    <li><strong>Chrome-Erweiterungskontext</strong>: Denken Sie daran, dass die Erweiterung in einem
+                        isolierten Kontext mit Sicherheitsbeschränkungen ausgeführt wird.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="build-and-test">
+            <h2 class="en">Build Process</h2>
+            <h2 class="de">Build-Prozess</h2>
+
+            <div class="en">
+                <p>The project uses Vite for building:</p>
+                <ol>
+                    <li><strong>Development</strong>: <code>npm run dev</code> - Builds in development mode with hot
+                        reloading.</li>
+                    <li><strong>Production</strong>: <code>npm run build</code> - Creates a production version in the
+                        <code>extension</code> folder.
+                    </li>
+                    <li><strong>Testing</strong>: Load the <code>extension</code> folder as an unpacked extension in
+                        Chrome.</li>
+                </ol>
+
+                <h3>Testing</h3>
+                <p>We recommend testing your changes in these scenarios:</p>
+                <ol>
+                    <li><strong>Different Content Types</strong>: Test with music, voice calls, videos, etc.</li>
+                    <li><strong>Edge Cases</strong>: Test with extreme filter settings and combinations.</li>
+                    <li><strong>Performance</strong>: Ensure changes don't cause audio glitches or high CPU usage.</li>
+                </ol>
+            </div>
+
+            <div class="de">
+                <p>Das Projekt verwendet Vite zum Erstellen:</p>
+                <ol>
+                    <li><strong>Entwicklung</strong>: <code>npm run dev</code> - Erstellt im Entwicklungsmodus mit Hot
+                        Reloading.</li>
+                    <li><strong>Produktion</strong>: <code>npm run build</code> - Erstellt eine Produktionsversion im
+                        Ordner <code>extension</code>.</li>
+                    <li><strong>Tests</strong>: Laden Sie den Ordner <code>extension</code> als entpackte Erweiterung in
+                        Chrome.</li>
+                </ol>
+
+                <h3>Testen</h3>
+                <p>Wir empfehlen, Ihre Änderungen in diesen Szenarien zu testen:</p>
+                <ol>
+                    <li><strong>Verschiedene Inhaltstypen</strong>: Testen Sie mit Musik, Sprachanrufen, Videos usw.
+                    </li>
+                    <li><strong>Randfälle</strong>: Testen Sie mit extremen Filtereinstellungen und Kombinationen.</li>
+                    <li><strong>Leistung</strong>: Stellen Sie sicher, dass Änderungen keine Audioprobleme oder hohe
+                        CPU-Auslastung verursachen.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2 class="en">Resources</h2>
+            <h2 class="de">Ressourcen</h2>
+
+            <div class="en">
+                <ul>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank">Web
+                            Audio API Documentation</a></li>
+                    <li><a href="https://v3.vuejs.org/" target="_blank">Vue 3 Documentation</a></li>
+                    <li><a href="https://developer.chrome.com/docs/extensions/reference/" target="_blank">Chrome
+                            Extension API</a></li>
+                </ul>
+            </div>
+
+            <div class="de">
+                <ul>
+                    <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API" target="_blank">Web
+                            Audio API Dokumentation</a></li>
+                    <li><a href="https://v3.vuejs.org/" target="_blank">Vue 3 Dokumentation</a></li>
+                    <li><a href="https://developer.chrome.com/docs/extensions/reference/" target="_blank">Chrome
+                            Extension API</a></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="en">
+                <p>BrowserEQ V2 - <a href="https://github.com/berraknil/BrowserEQ-V2">GitHub Repository</a> | <a
+                        href="index.html">Home</a></p>
+            </div>
+            <div class="de">
+                <p>BrowserEQ V2 - <a href="https://github.com/berraknil/BrowserEQ-V2">GitHub-Repository</a> | <a
+                        href="index.html">Startseite</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function setLanguage(lang) {
+            if (lang === 'de') {
+                document.body.classList.add('german');
+                document.getElementById('de-btn').classList.add('active');
+                document.getElementById('en-btn').classList.remove('active');
+            } else {
+                document.body.classList.remove('german');
+                document.getElementById('en-btn').classList.add('active');
+                document.getElementById('de-btn').classList.remove('active');
+            }
+        }
+    </script>
+</body>
+
+</html>

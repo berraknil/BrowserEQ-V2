@@ -1,0 +1,18 @@
+/* Additional CSS for language-specific elements */
+
+/* Language-specific logo handling */
+.en-only {
+  display: block;
+}
+
+.de-only {
+  display: none;
+}
+
+body.german .en-only {
+  display: none;
+}
+
+body.german .de-only {
+  display: block;
+}
