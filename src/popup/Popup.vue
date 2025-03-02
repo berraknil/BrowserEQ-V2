@@ -348,7 +348,10 @@ onBeforeUnmount(() => {
       </div>
       <div class="slider-wrapper">
         <span class="strip volume">
-          <Slider v-model="mainVolumeValue" sliderLabel="Main" :min="0" :max="3" :step="0.1" direction="vertical" />
+          <Slider v-model="mainVolumeValue" sliderLabel="Main" :min="0" :max="6" :step="0.1" direction="vertical" />
+          <span class="slider-value">
+            {{ mainVolumeValue?.toFixed(1) }}
+          </span>
           <Toggle v-model="isMuted" :input-value="isMuted" toggleLabel="Mute"
             @update:model-value="(value) => voiceMute({ value, currentVol: mainVolumeValue })" />
         </span>
@@ -726,16 +729,15 @@ main.minimized {
 
 .v-slider.v-input--horizontal {
   margin-inline: 0;
-  width: 100%;
-  /* Ensure slider takes full width */
+  width: 100% !important;
 }
 
 .compact-volume :deep(.v-slider__track) {
-  width: 100%;
+  width: 100% !important;
 }
 
 .compact-volume :deep(.v-slider__track-container) {
-  width: 100%;
+  width: 100% !important;
 }
 
 .v-slider.v-input--horizontal {
@@ -748,5 +750,13 @@ main.minimized {
 
 .compact-controls>.v-btn--icon .v-icon {
   --v-icon-size-multiplier: 1.5 !important
+}
+
+.slider-value {
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 4px solid #FFF3E0;
+  display: block;
+  min-height: 20px;
 }
 </style>
