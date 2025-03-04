@@ -23,14 +23,28 @@ const emit = defineEmits(['update:mainSliderValue', 'update:secondarySliderValue
 
 <template>
     <span class="strip">
+        <!-- Vertical frequency slider -->
         <Slider :model-value="mainSliderValue" @update:model-value="(value) => {
             emit('update:mainSliderValue', value);
-            emit('updateFilter', { type: filterType, value });
+            // Always pass both values to ensure filter state is complete
+            emit('updateFilter', {
+                type: filterType,
+                value,
+                secondaryValue: secondarySliderValue
+            });
         }" :sliderLabel="mainSliderLabel" :min="mainMin" :max="mainMax" :step="mainStep" direction="vertical"
             :showValue="true" />
-        <Slider :model-value="secondarySliderValue"
-            @update:model-value="(value) => emit('update:secondarySliderValue', value)"
-            :sliderLabel="secondarySliderLabel" :min="secondaryMin" :max="secondaryMax" :step="secondaryStep"
+
+        <!-- Horizontal Q/Gain slider -->
+        <Slider :model-value="secondarySliderValue" @update:model-value="(value) => {
+            emit('update:secondarySliderValue', value);
+            // Always pass both values to ensure filter state is complete
+            emit('updateFilter', {
+                type: filterType,
+                value: mainSliderValue,
+                secondaryValue: value
+            });
+        }" :sliderLabel="secondarySliderLabel" :min="secondaryMin" :max="secondaryMax" :step="secondaryStep"
             direction="horizontal" :showValue="true" />
         <Toggle :model-value="enabled" :input-value="inputEnabled" @update:model-value="(value) => {
             emit('update:enabled', value);

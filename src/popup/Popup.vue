@@ -205,8 +205,13 @@ function connectToFilter({ filterType, value }: { filterType: BiquadFilterType, 
 }
 
 // Update filter value method fix
-function updateFilterValue(type: BiquadFilterType, value: number) {
-  AudioProcessor.updateFilterValue(type, value);
+function updateFilterValue(type: BiquadFilterType, value: number, secondaryValue?: number) {
+  AudioProcessor.updateFilterValue(type, value, secondaryValue);
+
+  // Update local state to keep UI in sync
+  if (type === 'bandpass' && secondaryValue !== undefined) {
+    bandPassQValue.value = secondaryValue;
+  }
 }
 
 onMounted(async () => {
@@ -361,15 +366,15 @@ onBeforeUnmount(() => {
           <Strip v-model:mainSliderValue="highPassValue" v-model:secondarySliderValue="highPassQValue"
             v-model:enabled="highpassEnabled" :input-enabled="highpassEnabled" mainSliderLabel="High Pass"
             secondarySliderLabel="Resonance" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
-            :secondaryMax="6" :secondaryStep="1" filterType="highpass"
-            @updateFilter="({ type, value }) => updateFilterValue(type, value)"
+            :secondaryMax="10" :secondaryStep="0.1" filterType="highpass"
+            @updateFilter="({ type, value, secondaryValue }) => updateFilterValue(type, value, secondaryValue)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="bandPassValue" v-model:secondarySliderValue="bandPassQValue"
             v-model:enabled="bandPassEnabled" :input-enabled="bandPassEnabled" mainSliderLabel="Band Pass"
             secondarySliderLabel="Bandwidth" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
             :secondaryMax="100" :secondaryStep="1" filterType="bandpass"
-            @updateFilter="({ type, value }) => updateFilterValue(type, value)"
+            @updateFilter="({ type, value, secondaryValue }) => updateFilterValue(type, value, secondaryValue)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="lowPassValue" v-model:secondarySliderValue="lowPassQValue"

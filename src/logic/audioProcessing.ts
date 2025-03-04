@@ -31,6 +31,13 @@ export let gainNode: GainNode | null = null;
 export let source: MediaStreamAudioSourceNode;
 export let audioCtx: AudioContext;
 
+// Add this utility function at the top with other utility functions
+function bandwidthToQ(bandwidth: number): number {
+  // Convert bandwidth (0-100) to Q (0.1-10)
+  // Higher bandwidth = lower Q, Lower bandwidth = higher Q
+  return 10.1 - bandwidth / 10;
+}
+
 // Setup audio context and capture
 export async function startCapture(
   preset: EQPreset
@@ -48,40 +55,53 @@ export async function startCapture(
       gainNode = audioCtx.createGain();
       source.connect(gainNode);
 
-      // Initialize mute state from preset
-      if (preset && preset.mainOut) {
+      // Initialize mute state and volume
+      if (preset?.mainOut) {
         isMuted.value = preset.mainOut.muted || false;
         rememberedVolume = preset.mainOut.gain || 1.0;
-
-        // Apply initial volume based on mute state
-        if (gainNode) {
-          gainNode.gain.value = isMuted.value ? 0 : rememberedVolume;
-        }
+        gainNode.gain.value = isMuted.value ? 0 : rememberedVolume;
       }
 
-      // Create filter nodes
-      filters.value = Object.values(preset.filters).map((EQFilter) => {
-        let filter = audioCtx.createBiquadFilter();
-        filter.type = EQFilter.type as BiquadFilterType;
-        filter.frequency.value = 20;
+      // Create and initialize filter nodes with correct initial values
+      filters.value = Object.entries(preset.filters).map(
+        ([type, filterData]) => {
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = type as BiquadFilterType;
 
-        if (EQFilter.type === "peaking") {
-          filter.Q.value = EQFilter.Q.value;
-        } else {
-          filter.Q.value = 0;
+          // Set initial frequency
+          filter.frequency.value = filterData.frequency.value;
+
+          // Set Q value based on filter type
+          if (filterData.Q) {
+            switch (type) {
+              case "bandpass":
+                filter.Q.value = Math.max(0.1, filterData.Q.value); // Q must be > 0
+                break;
+              case "peaking":
+                filter.Q.value = filterData.Q.value || 2.0; // Default Q for peaking
+                break;
+              case "lowpass":
+              case "highpass":
+                filter.Q.value = filterData.Q.value || 0.707; // Butterworth response
+                break;
+              default:
+                filter.Q.value = filterData.Q.value || 1.0;
+            }
+          }
+
+          // Set gain for filters that support it
+          if (
+            filterData.gain &&
+            (type === "lowshelf" || type === "highshelf" || type === "peaking")
+          ) {
+            filter.gain.value = filterData.gain.value;
+          }
+
+          return filter;
         }
-
-        if (EQFilter.type === "lowshelf" || EQFilter.type === "highshelf") {
-          filter.gain.value = EQFilter.gain.value;
-        } else {
-          filter.gain.value = 0;
-        }
-
-        return filter;
-      });
+      );
 
       gainNode.connect(audioCtx.destination);
-
       resolve(stream);
     });
   });
@@ -118,10 +138,34 @@ export function setVolume(volume: number) {
   // If muted, we keep gain at 0 but remember the new volume for when unmuted
 }
 
-export function updateFilterValue(filterType: BiquadFilterType, value: number) {
+export function updateFilterValue(
+  filterType: BiquadFilterType,
+  value: number,
+  secondaryValue?: number
+) {
   const filter = filters.value.find((filter) => filter.type === filterType);
-  if (filter) {
-    filter.frequency.value = value;
+  if (!filter) return;
+
+  // Always update frequency
+  filter.frequency.value = value;
+
+  // Handle secondary parameter based on filter type
+  if (secondaryValue !== undefined) {
+    switch (filterType) {
+      case "bandpass":
+        // Convert bandwidth value to Q
+        filter.Q.value = bandwidthToQ(secondaryValue);
+        break;
+      case "lowpass":
+      case "highpass":
+        filter.Q.value = Math.max(0.1, secondaryValue); // Resonance control
+        break;
+      case "peaking":
+      case "lowshelf":
+      case "highshelf":
+        filter.gain.value = secondaryValue; // Gain control in dB
+        break;
+    }
   }
 }
 
@@ -133,13 +177,31 @@ export function connectToFilter(
   const targetFilter = filters.value.find(
     (filter) => filter.type === filterType
   );
-  if (!targetFilter) return;
+  if (!targetFilter || !preset.filters) return;
 
-  // Set enabled state in preset
-  (preset.filters as any)[filterType].enabled = enabled;
+  const filterData = preset.filters[filterType];
+  filterData.enabled = enabled;
 
   if (enabled) {
-    // Enabling filter
+    // Set initial values when enabling
+    targetFilter.frequency.value = filterData.frequency.value;
+
+    // Handle Q and gain values properly
+    if (filterType === "bandpass" && filterData.Q) {
+      targetFilter.Q.value = bandwidthToQ(filterData.Q.value);
+    } else if (filterData.Q) {
+      targetFilter.Q.value = filterData.Q.value;
+    }
+
+    if (
+      filterData.gain &&
+      (filterType === "lowshelf" ||
+        filterType === "highshelf" ||
+        filterType === "peaking")
+    ) {
+      targetFilter.gain.value = filterData.gain.value;
+    }
+
     try {
       if (activeFilters.value.length === 0) {
         // First filter being added
