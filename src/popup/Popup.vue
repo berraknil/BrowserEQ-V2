@@ -361,42 +361,42 @@ onBeforeUnmount(() => {
           <Strip v-model:mainSliderValue="highPassValue" v-model:secondarySliderValue="highPassQValue"
             v-model:enabled="highpassEnabled" :input-enabled="highpassEnabled" mainSliderLabel="High Pass"
             secondarySliderLabel="Resonance" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
-            :secondaryMax="10" :secondaryStep="0.1" filterType="highpass"
+            :secondaryMax="6" :secondaryStep="1" filterType="highpass"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="bandPassValue" v-model:secondarySliderValue="bandPassQValue"
             v-model:enabled="bandPassEnabled" :input-enabled="bandPassEnabled" mainSliderLabel="Band Pass"
             secondarySliderLabel="Bandwidth" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
-            :secondaryMax="10" :secondaryStep="0.1" filterType="bandpass"
+            :secondaryMax="100" :secondaryStep="1" filterType="bandpass"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="lowPassValue" v-model:secondarySliderValue="lowPassQValue"
             v-model:enabled="lowPassEnabled" :input-enabled="lowPassEnabled" mainSliderLabel="Low Pass"
             secondarySliderLabel="Resonance" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
-            :secondaryMax="10" :secondaryStep="0.1" filterType="lowpass"
+            :secondaryMax="6" :secondaryStep="1" filterType="lowpass"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="lowShelfValue" v-model:secondarySliderValue="lowShelfGainValue"
             v-model:enabled="lowShelfEnabled" :input-enabled="lowShelfEnabled" mainSliderLabel="Low Shelf"
-            secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-40"
-            :secondaryMax="40" :secondaryStep="0.1" filterType="lowshelf"
+            secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-30"
+            :secondaryMax="9" :secondaryStep="1" filterType="lowshelf"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="highShelfValue" v-model:secondarySliderValue="highShelfGainValue"
             v-model:enabled="highShelfEnabled" :input-enabled="highShelfEnabled" mainSliderLabel="High Shelf"
-            secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-40"
-            :secondaryMax="40" :secondaryStep="0.1" filterType="highshelf"
+            secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-30"
+            :secondaryMax="9" :secondaryStep="1" filterType="highshelf"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
           <Strip v-model:mainSliderValue="peakingValue" v-model:secondarySliderValue="peakingGainValue"
             v-model:enabled="peakingEnabled" :input-enabled="peakingEnabled" mainSliderLabel="Peaking"
-            secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
-            :secondaryMax="10" :secondaryStep="0.1" filterType="peaking"
+            secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-30"
+            :secondaryMax="9" :secondaryStep="1" filterType="peaking"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
         </template>

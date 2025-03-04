@@ -51,7 +51,6 @@ export const sharedConfig: UserConfig = {
     // https://github.com/antfu/unplugin-icons
     Icons(),
 
-
     // rewrite assets to use relative path
     {
       name: "assets-rewrite",
@@ -95,6 +94,7 @@ export default defineConfig(({ command }) => ({
         options: r("src/options/index.html"),
         popup: r("src/popup/index.html"),
       },
+      external: ["/docs"],
     },
   },
   test: {
