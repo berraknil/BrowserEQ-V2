@@ -3,6 +3,11 @@ import { onMessage } from "webext-bridge/content-script";
 import { createApp } from "vue";
 import App from "./ContentScript.vue";
 import { setupApp } from "~/logic/common-setup";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
 
 // Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (() => {
@@ -206,7 +211,52 @@ import { setupApp } from "~/logic/common-setup";
     return true; // Keep message channel open for async response
   });
 
-  // Initialize Vue app
-  const app = createApp(App);
-  setupApp(app);
+  // Create mount point first
+  const mountPoint = document.createElement("div");
+  mountPoint.id = "browser-eq-app";
+  document.documentElement.appendChild(mountPoint);
+
+  // Initialize Vuetify
+  const vuetify = createVuetify({
+    components,
+    directives,
+    theme: {
+      defaultTheme: "light",
+    },
+  });
+
+  // Initialize Vue app with error handling
+  function initializeApp() {
+    try {
+      const app = createApp(App);
+      app.use(vuetify);
+
+      // Make sure mount point exists
+      const container = document.querySelector("#browser-eq-app");
+      if (!container) {
+        console.error("Mount point not found");
+        return;
+      }
+
+      // Mount with error handling
+      app.mount("#browser-eq-app");
+    } catch (error) {
+      console.error("Failed to initialize app:", error);
+    }
+  }
+
+  // Wait for document to be ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeApp);
+  } else {
+    initializeApp();
+  }
+
+  // Cleanup mount point if needed
+  window.addEventListener("unload", () => {
+    const container = document.querySelector("#browser-eq-app");
+    if (container && container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+  });
 })();
