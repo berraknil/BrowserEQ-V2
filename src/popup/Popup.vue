@@ -73,71 +73,94 @@ watch(mainVolumeValue, (newValue) => {
   AudioProcessor.setVolume(newValue);
 });
 
-// Handle preset changes
+// Handle preset changes with error handling
 watch(selectedPreset, async (newPreset) => {
-  preset = EQValues[newPreset as keyof typeof EQValues];
-
-  // First update all enabled states
-  Object.entries(preset.filters).forEach(([filterType, filterData]: [string, any]) => {
-    switch (filterType) {
-      case 'highpass': highpassEnabled.value = Boolean(filterData.enabled); break;
-      case 'bandpass': bandPassEnabled.value = Boolean(filterData.enabled); break;
-      case 'lowpass': lowPassEnabled.value = Boolean(filterData.enabled); break;
-      case 'lowshelf': lowShelfEnabled.value = Boolean(filterData.enabled); break;
-      case 'highshelf': highShelfEnabled.value = Boolean(filterData.enabled); break;
-      case 'peaking': peakingEnabled.value = Boolean(filterData.enabled); break;
+  try {
+    preset = EQValues[newPreset as keyof typeof EQValues];
+    if (!preset) {
+      console.error('Invalid preset:', newPreset);
+      return;
     }
-  });
 
-  // Reset filters
-  AudioProcessor.resetFilters();
+    // First update all enabled states
+    Object.entries(preset.filters).forEach(([filterType, filterData]: [string, any]) => {
+      switch (filterType) {
+        case 'highpass': highpassEnabled.value = Boolean(filterData?.enabled); break;
+        case 'bandpass': bandPassEnabled.value = Boolean(filterData?.enabled); break;
+        case 'lowpass': lowPassEnabled.value = Boolean(filterData?.enabled); break;
+        case 'lowshelf': lowShelfEnabled.value = Boolean(filterData?.enabled); break;
+        case 'highshelf': highShelfEnabled.value = Boolean(filterData?.enabled); break;
+        case 'peaking': peakingEnabled.value = Boolean(filterData?.enabled); break;
+      }
+    });
 
-  // Update all other values
-  mainVolumeValue.value = preset.mainOut.gain;
+    // Reset filters with error handling
+    await AudioProcessor.resetFilters();
 
-  // Update filter values
-  Object.entries(preset.filters).forEach(([filterType, filterData]: [string, any]) => {
-    updateFilterValues(filterType, filterData);
-
-    // Connect enabled filters
-    if (filterData.enabled) {
-      AudioProcessor.connectToFilter(filterType, true, preset);
+    // Update main volume safely
+    if (preset.mainOut) {
+      mainVolumeValue.value = preset.mainOut.gain || 1.0;
     }
-  });
 
-  // Update mute state from preset
-  isMuted.value = preset.mainOut.muted;
+    // Update filter values with safety checks
+    Object.entries(preset.filters).forEach(([filterType, filterData]: [string, any]) => {
+      if (filterData) {
+        updateFilterValues(filterType, filterData);
+
+        // Connect enabled filters with safety check
+        if (filterData.enabled) {
+          AudioProcessor.connectToFilter(filterType, true, preset);
+        }
+      }
+    });
+
+    // Update mute state safely
+    isMuted.value = Boolean(preset.mainOut?.muted);
+  } catch (error) {
+    console.error('Error updating preset:', error);
+    // Optionally reset to a safe state or show user feedback
+  }
 });
 
 // Helper function to update filter values
 function updateFilterValues(filterType: string, filterData: any) {
-  switch (filterType) {
-    case 'highpass':
-      highPassValue.value = filterData.frequency.value;
-      highPassQValue.value = filterData.Q?.value || 0;
-      break;
-    case 'bandpass':
-      bandPassValue.value = filterData.frequency.value;
-      bandPassQValue.value = filterData.Q?.value || 0;
-      break;
-    case 'lowpass':
-      lowPassValue.value = filterData.frequency.value;
-      lowPassQValue.value = filterData.Q?.value || 0;
-      break;
-    case 'lowshelf':
-      lowShelfValue.value = filterData.frequency.value;
-      lowShelfGainValue.value = filterData.gain?.value || 0;
-      break;
-    case 'highshelf':
-      highShelfValue.value = filterData.frequency.value;
-      highShelfGainValue.value = filterData.gain?.value || 0;
-      break;
-    case 'peaking':
-      peakingValue.value = filterData.frequency.value;
-      peakingGainValue.value = filterData.gain?.value || 0;
-      break;
+  try {
+    if (!filterData) return;
+
+    switch (filterType) {
+      case 'highpass':
+        highPassValue.value = filterData.frequency?.value ?? highPassValue.value;
+        highPassQValue.value = filterData.Q?.value ?? highPassQValue.value;
+        break;
+      case 'bandpass':
+        bandPassValue.value = filterData.frequency?.value ?? bandPassValue.value;
+        bandPassQValue.value = filterData.Q?.value ?? bandPassQValue.value;
+        break;
+      case 'lowpass':
+        lowPassValue.value = filterData.frequency?.value ?? lowPassValue.value;
+        lowPassQValue.value = filterData.Q?.value ?? lowPassQValue.value;
+        break;
+      case 'lowshelf':
+        lowShelfValue.value = filterData.frequency?.value ?? lowShelfValue.value;
+        lowShelfGainValue.value = filterData.gain?.value ?? lowShelfGainValue.value;
+        break;
+      case 'highshelf':
+        highShelfValue.value = filterData.frequency?.value ?? highShelfValue.value;
+        highShelfGainValue.value = filterData.gain?.value ?? highShelfGainValue.value;
+        break;
+      case 'peaking':
+        peakingValue.value = filterData.frequency?.value ?? peakingValue.value;
+        peakingGainValue.value = filterData.gain?.value ?? peakingGainValue.value;
+        break;
+    }
+
+    // Only update filter if we have valid data
+    if (filterData.frequency?.value !== undefined) {
+      AudioProcessor.updateFilterValue(filterType as BiquadFilterType, filterData.frequency.value);
+    }
+  } catch (error) {
+    console.error(`Error updating filter values for ${filterType}:`, error);
   }
-  AudioProcessor.updateFilterValue(filterType as BiquadFilterType, filterData.frequency.value);
 }
 
 // Mute/unmute function
