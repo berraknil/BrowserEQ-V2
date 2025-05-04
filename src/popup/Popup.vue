@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch, onBeforeUnmount, computed } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount, computed, type Ref } from 'vue'
 import Slider from '~/components/Slider.vue'
 import Toggle from '~/components/Toggle.vue'
 import Strip from '~/components/Strip.vue'
@@ -34,27 +34,64 @@ const formattedPresetNames = computed(() => {
 const mainVolumeValue = ref(preset.mainOut.gain)
 const currentGainValue = ref(mainVolumeValue.value);
 
-// Filter values
-const lowPassValue = ref(preset.filters.lowpass.frequency.value)
-const lowPassEnabled = ref(preset.filters.lowpass.enabled)
-const highPassValue = ref(preset.filters.highpass.frequency.value)
-const highpassEnabled = ref(preset.filters.highpass.enabled)
-const lowShelfValue = ref(preset.filters.lowshelf.frequency.value)
-const lowShelfEnabled = ref(preset.filters.lowshelf.enabled)
-const highShelfValue = ref(preset.filters.highshelf.frequency.value)
-const highShelfEnabled = ref(preset.filters.highshelf.enabled)
-const bandPassValue = ref(preset.filters.bandpass.frequency.value)
-const bandPassEnabled = ref(preset.filters.bandpass.enabled)
-const peakingValue = ref(preset.filters.peaking.frequency.value)
-const peakingEnabled = ref(preset.filters.peaking.enabled)
+// Define filter types for consistent typing
+type FilterType = 'lowpass' | 'highpass' | 'lowshelf' | 'highshelf' | 'bandpass' | 'peaking';
+const filterTypes: FilterType[] = ['lowpass', 'highpass', 'lowshelf', 'highshelf', 'bandpass', 'peaking'];
 
-// Filter Q and gain values
-const highPassQValue = ref(preset.filters.highpass.Q?.value || 0);
-const bandPassQValue = ref(preset.filters.bandpass.Q?.value || 0);
-const lowPassQValue = ref(preset.filters.lowpass.Q?.value || 0);
-const lowShelfGainValue = ref(preset.filters.lowshelf.gain?.value || 0);
-const highShelfGainValue = ref(preset.filters.highshelf.gain?.value || 0);
-const peakingGainValue = ref(preset.filters.peaking.gain?.value || 0);
+// Create filter values and enabled states using mapping
+const filterValues = filterTypes.reduce((acc, type) => {
+  acc[`${type}Value`] = ref<number>(preset.filters[type].frequency.value || 0);
+  acc[`${type}Enabled`] = ref<boolean>(preset.filters[type].enabled);
+  return acc;
+}, {} as Record<string, ReturnType<typeof ref<number>> | ReturnType<typeof ref<boolean>>>);
+
+// Create filter Q and gain values using mapping
+const filterSecondaryValues = filterTypes.reduce((acc, type) => {
+  // Q values for filters that have them
+  if (['highpass', 'bandpass', 'lowpass'].includes(type)) {
+    acc[`${type}QValue`] = ref<number>(preset.filters[type].Q?.value ?? 0);
+  }
+  // Gain values for filters that have them
+  if (['lowshelf', 'highshelf', 'peaking'].includes(type)) {
+    acc[`${type}GainValue`] = ref<number>(preset.filters[type].gain?.value ?? 0);
+  }
+  return acc;
+}, {} as Record<string, ReturnType<typeof ref<number>>>);
+
+// Destructure for easier access in the code
+const {
+  lowpassValue, lowpassEnabled,
+  highpassValue, highpassEnabled,
+  lowshelfValue, lowshelfEnabled,
+  highshelfValue, highshelfEnabled,
+  bandpassValue, bandpassEnabled,
+  peakingValue, peakingEnabled
+} = filterValues as {
+  lowpassValue: Ref<number>,
+  lowpassEnabled: Ref<boolean>,
+  highpassValue: Ref<number>,
+  highpassEnabled: Ref<boolean>,
+  lowshelfValue: Ref<number>,
+  lowshelfEnabled: Ref<boolean>,
+  highshelfValue: Ref<number>,
+  highshelfEnabled: Ref<boolean>,
+  bandpassValue: Ref<number>,
+  bandpassEnabled: Ref<boolean>,
+  peakingValue: Ref<number>,
+  peakingEnabled: Ref<boolean>
+};
+
+const {
+  lowpassQValue, highpassQValue, bandpassQValue,
+  lowshelfGainValue, highshelfGainValue, peakingGainValue
+} = filterSecondaryValues as {
+  lowpassQValue: Ref<number>,
+  highpassQValue: Ref<number>,
+  bandpassQValue: Ref<number>,
+  lowshelfGainValue: Ref<number>,
+  highshelfGainValue: Ref<number>,
+  peakingGainValue: Ref<number>
+};
 
 function toggleMinimize() {
   isMinimized.value = !isMinimized.value;
@@ -82,15 +119,11 @@ watch(selectedPreset, async (newPreset) => {
       return;
     }
 
-    // First update all enabled states
+    // First update all enabled states using the new structure
     Object.entries(preset.filters).forEach(([filterType, filterData]: [string, any]) => {
-      switch (filterType) {
-        case 'highpass': highpassEnabled.value = Boolean(filterData?.enabled); break;
-        case 'bandpass': bandPassEnabled.value = Boolean(filterData?.enabled); break;
-        case 'lowpass': lowPassEnabled.value = Boolean(filterData?.enabled); break;
-        case 'lowshelf': lowShelfEnabled.value = Boolean(filterData?.enabled); break;
-        case 'highshelf': highShelfEnabled.value = Boolean(filterData?.enabled); break;
-        case 'peaking': peakingEnabled.value = Boolean(filterData?.enabled); break;
+      const enabledKey = `${filterType}Enabled`;
+      if (enabledKey in filterValues) {
+        filterValues[enabledKey].value = Boolean(filterData?.enabled);
       }
     });
 
@@ -127,31 +160,23 @@ function updateFilterValues(filterType: string, filterData: any) {
   try {
     if (!filterData) return;
 
-    switch (filterType) {
-      case 'highpass':
-        highPassValue.value = filterData.frequency?.value ?? highPassValue.value;
-        highPassQValue.value = filterData.Q?.value ?? highPassQValue.value;
-        break;
-      case 'bandpass':
-        bandPassValue.value = filterData.frequency?.value ?? bandPassValue.value;
-        bandPassQValue.value = filterData.Q?.value ?? bandPassQValue.value;
-        break;
-      case 'lowpass':
-        lowPassValue.value = filterData.frequency?.value ?? lowPassValue.value;
-        lowPassQValue.value = filterData.Q?.value ?? lowPassQValue.value;
-        break;
-      case 'lowshelf':
-        lowShelfValue.value = filterData.frequency?.value ?? lowShelfValue.value;
-        lowShelfGainValue.value = filterData.gain?.value ?? lowShelfGainValue.value;
-        break;
-      case 'highshelf':
-        highShelfValue.value = filterData.frequency?.value ?? highShelfValue.value;
-        highShelfGainValue.value = filterData.gain?.value ?? highShelfGainValue.value;
-        break;
-      case 'peaking':
-        peakingValue.value = filterData.frequency?.value ?? peakingValue.value;
-        peakingGainValue.value = filterData.gain?.value ?? peakingGainValue.value;
-        break;
+    const valueKey = `${filterType}Value`;
+    if (valueKey in filterValues) {
+      filterValues[valueKey].value = filterData.frequency?.value ?? filterValues[valueKey].value;
+    }
+
+    // Update Q or Gain values
+    let secondaryValueKey = '';
+    if (['highpass', 'bandpass', 'lowpass'].includes(filterType)) {
+      secondaryValueKey = `${filterType}QValue`;
+      if (secondaryValueKey in filterSecondaryValues) {
+        filterSecondaryValues[secondaryValueKey].value = filterData.Q?.value ?? filterSecondaryValues[secondaryValueKey].value;
+      }
+    } else {
+      secondaryValueKey = `${filterType}GainValue`;
+      if (secondaryValueKey in filterSecondaryValues) {
+        filterSecondaryValues[secondaryValueKey].value = filterData.gain?.value ?? filterSecondaryValues[secondaryValueKey].value;
+      }
     }
 
     // Only update filter if we have valid data
@@ -224,7 +249,32 @@ function downloadRecording() {
 
 // Connect filter method fix
 function connectToFilter({ filterType, value }: { filterType: BiquadFilterType, value: boolean }) {
+  // When enabling a filter, first ensure current values are applied
+  if (value) {
+    const valueKey = `${filterType}Value`;
+    let secondaryValueKey: string;
+
+    // Determine which secondary value to use (Q or gain)
+    if (['highpass', 'bandpass', 'lowpass'].includes(filterType)) {
+      secondaryValueKey = `${filterType}QValue`;
+    } else {
+      secondaryValueKey = `${filterType}GainValue`;
+    }
+
+    // Apply current values before connecting
+    const frequency = filterValues[valueKey]?.value;
+    const secondaryValue = filterSecondaryValues[secondaryValueKey]?.value;
+
+    AudioProcessor.updateFilterValue(filterType, frequency, secondaryValue);
+  }
+
+  // Connect or disconnect the filter
   AudioProcessor.connectToFilter(filterType, value, preset);
+
+  // Update preset state
+  if (filterType in preset.filters) {
+    preset.filters[filterType].enabled = value;
+  }
 }
 
 // Update filter value method fix
@@ -232,8 +282,14 @@ function updateFilterValue(type: BiquadFilterType, value: number, secondaryValue
   AudioProcessor.updateFilterValue(type, value, secondaryValue);
 
   // Update local state to keep UI in sync
-  if (type === 'bandpass' && secondaryValue !== undefined) {
-    bandPassQValue.value = secondaryValue;
+  if (secondaryValue !== undefined) {
+    const secondaryKey = ['highpass', 'bandpass', 'lowpass'].includes(type)
+      ? `${type}QValue`
+      : `${type}GainValue`;
+
+    if (secondaryKey in filterSecondaryValues) {
+      filterSecondaryValues[secondaryKey].value = secondaryValue;
+    }
   }
 }
 
@@ -386,36 +442,36 @@ onBeforeUnmount(() => {
 
         <!-- Other strips hidden when minimized -->
         <template v-if="!isMinimized">
-          <Strip v-model:mainSliderValue="highPassValue" v-model:secondarySliderValue="highPassQValue"
+          <Strip v-model:mainSliderValue="highpassValue" v-model:secondarySliderValue="highpassQValue"
             v-model:enabled="highpassEnabled" :input-enabled="highpassEnabled" mainSliderLabel="High Pass"
             secondarySliderLabel="Resonance" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
             :secondaryMax="10" :secondaryStep="0.1" filterType="highpass"
             @updateFilter="({ type, value, secondaryValue }) => updateFilterValue(type, value, secondaryValue)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
-          <Strip v-model:mainSliderValue="bandPassValue" v-model:secondarySliderValue="bandPassQValue"
-            v-model:enabled="bandPassEnabled" :input-enabled="bandPassEnabled" mainSliderLabel="Band Pass"
+          <Strip v-model:mainSliderValue="bandpassValue" v-model:secondarySliderValue="bandpassQValue"
+            v-model:enabled="bandpassEnabled" :input-enabled="bandpassEnabled" mainSliderLabel="Band Pass"
             secondarySliderLabel="Bandwidth" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
             :secondaryMax="100" :secondaryStep="1" filterType="bandpass"
             @updateFilter="({ type, value, secondaryValue }) => updateFilterValue(type, value, secondaryValue)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
-          <Strip v-model:mainSliderValue="lowPassValue" v-model:secondarySliderValue="lowPassQValue"
-            v-model:enabled="lowPassEnabled" :input-enabled="lowPassEnabled" mainSliderLabel="Low Pass"
+          <Strip v-model:mainSliderValue="lowpassValue" v-model:secondarySliderValue="lowpassQValue"
+            v-model:enabled="lowpassEnabled" :input-enabled="lowpassEnabled" mainSliderLabel="Low Pass"
             secondarySliderLabel="Resonance" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="0"
             :secondaryMax="6" :secondaryStep="1" filterType="lowpass"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
-          <Strip v-model:mainSliderValue="lowShelfValue" v-model:secondarySliderValue="lowShelfGainValue"
-            v-model:enabled="lowShelfEnabled" :input-enabled="lowShelfEnabled" mainSliderLabel="Low Shelf"
+          <Strip v-model:mainSliderValue="lowshelfValue" v-model:secondarySliderValue="lowshelfGainValue"
+            v-model:enabled="lowshelfEnabled" :input-enabled="lowshelfEnabled" mainSliderLabel="Low Shelf"
             secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-30"
             :secondaryMax="9" :secondaryStep="1" filterType="lowshelf"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
             @toggleFilter="({ filterType, value }) => connectToFilter({ filterType, value })" />
 
-          <Strip v-model:mainSliderValue="highShelfValue" v-model:secondarySliderValue="highShelfGainValue"
-            v-model:enabled="highShelfEnabled" :input-enabled="highShelfEnabled" mainSliderLabel="High Shelf"
+          <Strip v-model:mainSliderValue="highshelfValue" v-model:secondarySliderValue="highshelfGainValue"
+            v-model:enabled="highshelfEnabled" :input-enabled="highshelfEnabled" mainSliderLabel="High Shelf"
             secondarySliderLabel="Gain" :mainMin="20" :mainMax="22000" :mainStep="1" :secondaryMin="-30"
             :secondaryMax="9" :secondaryStep="1" filterType="highshelf"
             @updateFilter="({ type, value }) => updateFilterValue(type, value)"
