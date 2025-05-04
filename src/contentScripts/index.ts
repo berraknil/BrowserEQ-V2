@@ -1,15 +1,12 @@
 /* eslint-disable no-console */
-import { onMessage } from "webext-bridge/content-script";
 import { createApp } from "vue";
 import App from "./ContentScript.vue";
-import { setupApp } from "~/logic/common-setup";
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
 
-// Firefox `browser.tabs.executeScript()` requires scripts return a primitive value
 (() => {
   console.info("BrowserEQ v2 initialized");
 
