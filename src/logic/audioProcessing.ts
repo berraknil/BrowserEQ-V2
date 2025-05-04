@@ -31,6 +31,16 @@ export let gainNode: GainNode | null = null;
 export let source: MediaStreamAudioSourceNode;
 export let audioCtx: AudioContext;
 
+// Add a cache to store user-adjusted filter values
+const userAdjustedFilterValues = new Map<
+  string,
+  {
+    frequency: number;
+    Q?: number;
+    gain?: number;
+  }
+>();
+
 // Add this utility function at the top with other utility functions
 function bandwidthToQ(bandwidth: number): number {
   // Convert bandwidth (0-100) to Q (0.1-10)
@@ -149,24 +159,36 @@ export function updateFilterValue(
   // Always update frequency
   filter.frequency.value = value;
 
+  // Store user adjusted values in our cache
+  let cachedValues = userAdjustedFilterValues.get(filterType) || {
+    frequency: value,
+  };
+  cachedValues.frequency = value;
+
   // Handle secondary parameter based on filter type
   if (secondaryValue !== undefined) {
     switch (filterType) {
       case "bandpass":
         // Convert bandwidth value to Q
         filter.Q.value = bandwidthToQ(secondaryValue);
+        cachedValues.Q = secondaryValue; // Store bandwidth value
         break;
       case "lowpass":
       case "highpass":
         filter.Q.value = Math.max(0.1, secondaryValue); // Resonance control
+        cachedValues.Q = secondaryValue;
         break;
       case "peaking":
       case "lowshelf":
       case "highshelf":
         filter.gain.value = secondaryValue; // Gain control in dB
+        cachedValues.gain = secondaryValue;
         break;
     }
   }
+
+  // Update the cache
+  userAdjustedFilterValues.set(filterType, cachedValues);
 }
 
 export function connectToFilter(
@@ -183,23 +205,53 @@ export function connectToFilter(
   filterData.enabled = enabled;
 
   if (enabled) {
-    // Set initial values when enabling
-    targetFilter.frequency.value = filterData.frequency.value;
+    // Use cached user-adjusted values if available, otherwise use preset values
+    const cachedValues = userAdjustedFilterValues.get(filterType);
 
-    // Handle Q and gain values properly
-    if (filterType === "bandpass" && filterData.Q) {
-      targetFilter.Q.value = bandwidthToQ(filterData.Q.value);
-    } else if (filterData.Q) {
-      targetFilter.Q.value = filterData.Q.value;
-    }
+    if (cachedValues) {
+      // Restore user-adjusted values from cache
+      targetFilter.frequency.value = cachedValues.frequency;
 
-    if (
-      filterData.gain &&
-      (filterType === "lowshelf" ||
-        filterType === "highshelf" ||
-        filterType === "peaking")
-    ) {
-      targetFilter.gain.value = filterData.gain.value;
+      if (filterType === "bandpass" && cachedValues.Q !== undefined) {
+        targetFilter.Q.value = bandwidthToQ(cachedValues.Q);
+      } else if (cachedValues.Q !== undefined) {
+        targetFilter.Q.value = cachedValues.Q;
+      }
+
+      if (
+        cachedValues.gain !== undefined &&
+        (filterType === "lowshelf" ||
+          filterType === "highshelf" ||
+          filterType === "peaking")
+      ) {
+        targetFilter.gain.value = cachedValues.gain;
+      }
+    } else {
+      // First-time enable, use preset values
+      targetFilter.frequency.value = filterData.frequency.value;
+
+      // Handle Q and gain values properly
+      if (filterType === "bandpass" && filterData.Q) {
+        targetFilter.Q.value = bandwidthToQ(filterData.Q.value);
+      } else if (filterData.Q) {
+        targetFilter.Q.value = filterData.Q.value;
+      }
+
+      if (
+        filterData.gain &&
+        (filterType === "lowshelf" ||
+          filterType === "highshelf" ||
+          filterType === "peaking")
+      ) {
+        targetFilter.gain.value = filterData.gain.value;
+      }
+
+      // Initialize the cache with preset values
+      userAdjustedFilterValues.set(filterType, {
+        frequency: filterData.frequency.value,
+        Q: filterData.Q?.value,
+        gain: filterData.gain?.value,
+      });
     }
 
     try {
