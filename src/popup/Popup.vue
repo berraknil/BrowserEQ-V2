@@ -264,7 +264,7 @@ function connectToFilter({ filterType, value }: { filterType: BiquadFilterType, 
     // Apply current values before connecting
     const frequency = filterValues[valueKey]?.value;
     const secondaryValue = filterSecondaryValues[secondaryValueKey]?.value;
-
+    //@ts-ignore
     AudioProcessor.updateFilterValue(filterType, frequency, secondaryValue);
   }
 

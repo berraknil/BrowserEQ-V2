@@ -2,7 +2,7 @@
 import Slider from './Slider.vue'
 import Toggle from './Toggle.vue'
 
-const props = defineProps<{
+defineProps<{
     mainSliderValue: number
     secondarySliderValue: number
     enabled: boolean
