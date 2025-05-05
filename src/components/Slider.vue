@@ -62,7 +62,7 @@ const sliderValue = defineModel<number>()
   min-height: 20px;
 }
 
-/* 
+/* Comment out the following during DEV
 .v-slider.v-input--horizontal>.v-input__control {
   display: contents !important;
 } */

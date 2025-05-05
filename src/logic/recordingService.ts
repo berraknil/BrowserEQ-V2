@@ -66,7 +66,9 @@ export function stopRecording() {
     recordingProcessor.value.disconnect();
     recordingSource.value?.disconnect();
     // Disconnect gainNode from recording destination
-    gainNode?.disconnect(recordingDestination.value);
+    if (gainNode && recordingDestination.value) {
+      gainNode.disconnect(recordingDestination.value);
+    }
     recordingDestination.value = null;
   }
 

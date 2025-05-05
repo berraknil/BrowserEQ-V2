@@ -29,9 +29,3 @@ export async function togglePlayback(currentStream: MediaStream) {
     return false;
   }
 }
-
-// Remove these functions as they're not working properly:
-// export function rewindStream() {...}
-// export function forwardStream() {...}
-// export function restartStream() {...}
-// function sendMediaCommand(action: string) {...}
