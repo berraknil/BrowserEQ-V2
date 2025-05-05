@@ -130,7 +130,9 @@ function encodeWAV(audioData: Float32Array[], sampleRate: number): Blob {
       const sample = Math.max(-1, Math.min(1, audioData[channel][i]));
       view.setInt16(
         offset + (i * numChannels + channel) * 2,
+        // the maximum value for a signed 16-bit integer
         sample * 0x7fff,
+        // little-endian
         true
       );
     }

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - BrowserEQ v2</title>
+    <!-- Google Font imports -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- External stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .privacy-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .privacy-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .privacy-container h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #e2b241;
+            padding-bottom: 10px;
+        }
+
+        .privacy-container ul {
+            padding-left: 20px;
+        }
+
+        .privacy-container ul li {
+            margin-bottom: 10px;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 15px;
+            background-color: #e2b241;
+            color: #212121;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #c29b37;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wave-decoration"></div>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <img src="images/logo.png" alt="BrowserEQ Logo" class="logo">
+                </div>
+                <div class="subtitle-container">
+                    <p class="mono-subtitle">« Privacy Policy »</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="privacy-container">
+        <a href="index.html" class="back-button">← Back to Main Page</a>
+
+        <h1>BrowserEQ V2 Privacy Policy</h1>
+
+        <p><em>Last Updated: <span id="currentDate"></span></em></p>
+
+        <h2>Overview</h2>
+        <p>BrowserEQ V2 is an audio equalizer Chrome extension that gives users control over how audio sounds in their
+            browser. We are committed to protecting your privacy and ensuring transparency about how our extension
+            functions.</p>
+
+        <h2>Data Collection and Usage</h2>
+        <p><strong>BrowserEQ V2 does not collect, store, or transmit any personal information or browsing data.</strong>
+        </p>
+        <p>Specifically:</p>
+        <ul>
+            <li>We <strong>do not</strong> collect any personal information</li>
+            <li>We <strong>do not</strong> track your browsing history</li>
+            <li>We <strong>do not</strong> store or transmit audio content</li>
+            <li>We <strong>do not</strong> use analytics or tracking tools</li>
+            <li>We <strong>do not</strong> share any data with third parties</li>
+        </ul>
+
+        <h2>Local Storage Usage</h2>
+        <p>BrowserEQ V2 stores the following data locally on your device only:</p>
+        <ul>
+            <li>EQ settings and preferences</li>
+            <li>Custom presets you create</li>
+            <li>UI state preferences (minimized state, selected filters)</li>
+        </ul>
+        <p>This data remains on your device and is only used to preserve your settings between browser sessions.</p>
+
+        <h2>Permissions Explained</h2>
+        <p>Our extension requests the following permissions, and here's why each is needed:</p>
+        <ul>
+            <li><strong>tabCapture</strong>: Required to access and process audio from browser tabs</li>
+            <li><strong>storage</strong>: Needed to save your EQ settings locally</li>
+            <li><strong>tabs</strong>: Used to apply audio processing to the active tab</li>
+            <li><strong>activeTab</strong>: Ensures the extension only affects the tab you're currently using</li>
+            <li><strong>scripting</strong>: Enables the extension to apply audio processing correctly</li>
+            <li><strong>host_permissions</strong>: Allows the extension to function across all websites where you want
+                audio enhancement</li>
+        </ul>
+        <p>These permissions are used solely for the core audio processing functionality of the extension and not for
+            collecting any user data.</p>
+
+        <h2>Audio Processing</h2>
+        <p>All audio processing happens locally (on your computer):</p>
+        <ol>
+            <li>Audio from the browser tab is captured</li>
+            <li>The audio is processed through our equalizer filters locally</li>
+            <li>The processed audio is played back in real-time</li>
+            <li>No audio data is ever sent to external servers or stored</li>
+        </ol>
+
+        <h2>Changes to This Policy</h2>
+        <p>We may occasionally update this Privacy Policy. When we do, we will revise the "Last Updated" date above.</p>
+
+        <h2>Contact</h2>
+        <p>If you have any questions or concerns about this Privacy Policy or our extension, please contact us through
+            our <a href="https://github.com/berraknil/BrowserEQ-V2">GitHub repository</a>.</p>
+
+        <h2>Additional Resources</h2>
+        <p>For more information about how Chrome extensions work with your data, visit the <a
+                href="https://developer.chrome.com/docs/webstore/user_data/">Chrome Web Store User Data Privacy
+                page</a>.</p>
+
+        <a href="index.html" class="back-button">← Back to Main Page</a>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>BrowserEQ v2 - <a href="https://berraknil.github.io">Berrak Nil</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Set the current date for the "Last Updated" field
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString();
+    </script>
+</body>
+
+</html>
